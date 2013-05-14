@@ -9,6 +9,7 @@ OTHER_CPLUSPLUSFLAGS="-D__MACOSX_CORE__ -lpthread -mtune=native"
 ARCH="-m32 -arch i386"
 
 OF_PATH=".."
+SRC_DIR="src"
 BUILD_DIR="bin"
 DATA_DIR="data"
 
@@ -78,12 +79,12 @@ OF_CORE_LIBS="${LIB_POCO_1} ${LIB_POCO_2} ${LIB_POCO_3} ${LIB_POCO_4} ${LIB_POCO
 OF_FRAMEWORKS="-framework ApplicationServices -framework AGL -framework GLUT -framework Carbon -framework OpenGL -framework QuickTime -framework QTKit -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks -iframework/Users/brunodias/openFrameworks/tests/test_template/../../libs/glut/lib/osx"
 
 # Find all tests
-for te in $(ls -A | grep .cpp); do
+for te in $(ls -A src | grep .cpp); do
     OUTPUT=$(echo $te | sed -e "s/\.cpp//g")
     echo ""
     echo "Compiling $te > $OUTPUT"
     echo ""
-    $CC $te ${ARCH} ${CFLAGS} ${OF_FRAMEWORKS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} -o ${BUILD_DIR}/${OUTPUT}
+    $CC $SRC_DIR/$te ${ARCH} ${CFLAGS} ${OF_FRAMEWORKS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} -o ${BUILD_DIR}/${OUTPUT}
 done
 
 echo ""
@@ -96,17 +97,12 @@ echo ""
 echo "Running tests..."
 echo ""
 
-rm -rf $DATA_DIR/*
-
-for te in $(ls -A | grep .cpp); do
+for te in $(ls -A src | grep .cpp); do
     OUTPUT=$(echo $te | sed -e "s/\.cpp//g")
     cd $BUILD_DIR
     echo "* Running test $OUTPUT..."
     echo ""
-    ./$OUTPUT >> ../$DATA_DIR/$OUTPUT.test
-    cat ../$DATA_DIR/$OUTPUT.test
-    echo ""
-    echo "* End test $OUTPUT..."
+    ./$OUTPUT
     echo ""
     cd ..
 done
