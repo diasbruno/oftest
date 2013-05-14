@@ -7,11 +7,11 @@ clone in the root of your openFrameworks folder.
 
 - running tests
 
-./run_test
+`` ./run_test ``
 
 runs all tests.
 
-./run_test ofFileUtils
+`` ./run_test ofFileUtils ``
 
 runs a specific test.
 
