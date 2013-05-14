@@ -3,14 +3,15 @@
 
 // include 
 
+using namespace std;
+
 // what test 
-// ex: ofColorSuite
-class ofSuite 
+class {WHAT}Suite 
     : public Test::Suite {
 public:
     
-    ofSuite() {
-        TEST_ADD( ofSuite::test_instantiation )
+    {WHAT}Suite() {
+        TEST_ADD( {WHAT}Suite::test_instantiation )
     }
     
 protected:
@@ -34,8 +35,7 @@ int
 main() {
     static Test::Suite ts_types;
 
-    // change this                             - 
-    ts_types.add( auto_ptr<Test::Suite>( new ofSuite ) );
+    ts_types.add( auto_ptr<Test::Suite>( new {WHAT}Suite ) );
 
     Test::TextOutput output( Test::TextOutput::Verbose );
     
