@@ -1,0 +1,16 @@
+#!/usr/bin/env python
+
+import os
+import sys
+import re
+
+def main(args):
+    templatefile = open( "template.txt", "r" )
+    output = re.sub(r'{WHAT}', args, templatefile.read())
+    templatefile.close()
+    templatefile = open( "src/"+args+".cpp", "w" )
+    print "creating ", "src/"+args+".cpp"
+    templatefile.write( output )
+    templatefile.close()
+
+main( sys.argv[1] )
