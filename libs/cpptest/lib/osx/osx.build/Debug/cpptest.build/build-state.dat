@@ -1,0 +1,403 @@
+Tcpptest
+v7
+r0
+t390253005.731760
+cCheck dependencies
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/collectoroutput.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/collectoroutput.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/compileroutput.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/compileroutput.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/htmloutput.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/htmloutput.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/missing.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/source.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/source.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/suite.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/suite.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/textoutput.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/textoutput.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/time.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/time.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/utils.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/utils.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+cLibtool /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/libcpptest.a normal i386
+
+N/Developer/SDKs/MacOSX10.6.sdk
+c000000004D5A274300000000000000EE
+t1297753923
+s238
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/math.h
+c000000004A5C14A000000000000004F1
+t1247548576
+s1265
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/sys/time.h
+c000000004CC3DE680000000000001E17
+t1287904872
+s7703
+
+N/Developer/SDKs/MacOSX10.6.sdk/usr/include/time.h
+c000000004BBD2CE9000000000000178E
+t1270689001
+s6030
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../config/config.h
+c00000000510079710000000000000816
+t1358985585
+s2070
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/Debug/libcpptest.a
+t1368560175
+s900256
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/libcpptest.a
+t1368560205
+s900256
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/collectoroutput.o
+t1368560204
+s212356
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/compileroutput.o
+t1368560203
+s92036
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/cpptest.LinkFileList
+c000000005192922C000000000000047B
+t1368560172
+s1147
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/htmloutput.o
+t1368560204
+s181224
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o
+t1368560204
+s3124
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/source.o
+t1368560204
+s32568
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/suite.o
+t1368560205
+s151300
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/textoutput.o
+t1368560205
+s120180
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/time.o
+t1368560205
+s72052
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/utils.o
+t1368560205
+s2076
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/collectoroutput.cpp
+c0000000051007906000000000000092B
+t1358985478
+s2347
+i"winconfig.h"
+i"config.h"
+i"cpptest-collectoroutput.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/compileroutput.cpp
+c00000000510079060000000000000C99
+t1358985478
+s3225
+i<cstring>
+i<sstream>
+i"cpptest-compileroutput.h"
+i"cpptest-source.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/htmloutput.cpp
+c00000000510079060000000000002F67
+t1358985478
+s12135
+i<algorithm>
+i<sstream>
+i"winconfig.h"
+i"config.h"
+i"cpptest-htmloutput.h"
+i"utils.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/missing.cpp
+c000000005100790600000000000006A7
+t1358985478
+s1703
+i"winconfig.h"
+i"config.h"
+i"missing.h"
+i<windows.h>
+i<cmath>
+i<math.h>
+i<cassert>
+i<ctime>
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/source.cpp
+c0000000051007906000000000000082E
+t1358985478
+s2094
+i"cpptest-source.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/suite.cpp
+c000000005100790600000000000019FA
+t1358985478
+s6650
+i<algorithm>
+i<cassert>
+i<cstring>
+i<functional>
+i<numeric>
+i"winconfig.h"
+i"config.h"
+i"cpptest-output.h"
+i"cpptest-source.h"
+i"cpptest-suite.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/textoutput.cpp
+c00000000510079060000000000000C91
+t1358985478
+s3217
+i<algorithm>
+i"winconfig.h"
+i"config.h"
+i"cpptest-textoutput.h"
+i"cpptest-time.h"
+i"utils.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/time.cpp
+c00000000510079060000000000000D63
+t1358985478
+s3427
+i"winconfig.h"
+i"config.h"
+i"missing.h"
+i"cpptest-time.h"
+i<sys/time.h>
+i<time.h>
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/utils.cpp
+c00000000510079060000000000000504
+t1358985478
+s1284
+i"winconfig.h"
+i"config.h"
+i"missing.h"
+i"utils.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/cpptest-collectoroutput.h
+c000000005100790600000000000009F3
+t1358985478
+s2547
+i<list>
+i<string>
+i<vector>
+i"cpptest-output.h"
+i"cpptest-source.h"
+i"cpptest-time.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/cpptest-compileroutput.h
+c00000000510079060000000000000C6D
+t1358985478
+s3181
+i<iostream>
+i<stdexcept>
+i"cpptest-output.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/cpptest-htmloutput.h
+c00000000510079060000000000000652
+t1358985478
+s1618
+i<iostream>
+i<string>
+i"cpptest-collectoroutput.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/cpptest-output.h
+c00000000510079060000000000000E69
+t1358985478
+s3689
+i<string>
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/cpptest-source.h
+c0000000051007906000000000000065C
+t1358985478
+s1628
+i<string>
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/cpptest-suite.h
+c00000000510079060000000000000D7C
+t1358985478
+s3452
+i<list>
+i<memory>
+i<string>
+i"cpptest-time.h"
+i"cpptest-source.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/cpptest-textoutput.h
+c00000000510079060000000000000976
+t1358985478
+s2422
+i<iostream>
+i<list>
+i"cpptest-source.h"
+i"cpptest-output.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/cpptest-time.h
+c000000005100790600000000000006D0
+t1358985478
+s1744
+i<iostream>
+i<string>
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/missing.h
+c00000000510079060000000000000560
+t1358985478
+s1376
+i"winconfig.h"
+i"config.h"
+
+N/Users/brunodias/openFrameworks/tests/libs/cpptest/src/utils.h
+c00000000510079060000000000000432
+t1358985478
+s1074
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies390253003#390253003#0(0"0(0#1#0"8600830720#0"0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/collectoroutput.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/collectoroutput.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253003.342711
+e390253004.256030
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/collectoroutput.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/collectoroutput.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@89"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/collectoroutput.cpp390253003#390253004#0(0"0(0#0#81"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/collectoroutput.cpp8600764736#1467"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/collectoroutput.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/collectoroutput.o0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/compileroutput.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/compileroutput.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253003.343780
+e390253003.973196
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/compileroutput.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/compileroutput.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@88"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/compileroutput.cpp390253003#390253003#0(0"0(0#0#80"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/compileroutput.cpp8599329504#1465"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/compileroutput.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/compileroutput.o0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/htmloutput.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/htmloutput.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253003.973288
+e390253004.939777
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/htmloutput.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/htmloutput.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@84"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/htmloutput.cpp390253003#390253004#0(0"0(0#0#76"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/htmloutput.cpp8651639040#1457"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/htmloutput.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/htmloutput.o0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/missing.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253004.256124
+e390253004.330772
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/missing.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@81"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/missing.cpp390253004#390253004#0(0"0(0#0#73"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/missing.cpp8653484192#1451"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/missing.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/source.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/source.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253004.330871
+e390253004.582249
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/source.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/source.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@80"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/source.cpp390253004#390253004#0(0"0(0#0#72"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/source.cpp8653013952#1449"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/source.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/source.o0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/suite.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/suite.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253004.582352
+e390253005.252350
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/suite.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/suite.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@79"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/suite.cpp390253004#390253005#0(0"0(0#0#71"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/suite.cpp8648120704#1447"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/suite.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/suite.o0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/textoutput.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/textoutput.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253004.939937
+e390253005.583281
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/textoutput.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/textoutput.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@84"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/textoutput.cpp390253004#390253005#0(0"0(0#0#76"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/textoutput.cpp8606814400#1457"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/textoutput.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/textoutput.o0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/time.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/time.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253005.252451
+e390253005.708403
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/time.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/time.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@78"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/time.cpp390253005#390253005#0(0"0(0#0#70"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/time.cpp8654076320#1445"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/time.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/time.o0#
+
+CCompileC ../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/utils.o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/utils.cpp normal i386 c++ com.apple.compilers.gcc.4_2
+s390253005.583377
+e390253005.615123
+r1
+xCompileC
+x../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/utils.o
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/utils.cpp
+xnormal
+xi386
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@79"Compile /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/utils.cpp390253005#390253005#0(0"0(0#0#71"/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/utils.cpp8650138624#1447"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch i386 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-generated-files.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-own-target-headers.hmap -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-all-target-headers.hmap -iquote /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/cpptest-project-headers.hmap -F/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/include -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources/i386 -I/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/DerivedSources -c /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../src/utils.cpp -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/utils.o0#
+
+CLibtool /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/Debug/libcpptest.a normal i386
+s390252975.049949
+e390252975.068228
+r1
+xLibtool
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/Debug/libcpptest.a
+xnormal
+xi386
+o/Developer/usr/bin/libtool: file: /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o has no symbols
+lSLF07#2@49"Libtool ../lib/osx/Debug/libcpptest.a normal i386390252975#390252975#0(175"/Developer/usr/bin/libtool: file: /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o has no symbols0(0#0#0"8605878080#510"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv MACOSX_DEPLOYMENT_TARGET 10.6    /Developer/usr/bin/libtool -static -arch_only i386 -syslibroot /Developer/SDKs/MacOSX10.6.sdk -L/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/Debug -filelist /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/cpptest.LinkFileList -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/Debug/libcpptest.a0#
+
+CLibtool /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/libcpptest.a normal i386
+s390253005.708493
+e390253005.731709
+r1
+xLibtool
+x/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/libcpptest.a
+xnormal
+xi386
+o/Developer/usr/bin/libtool: file: /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o has no symbols
+lSLF07#2@43"Libtool ../lib/osx/libcpptest.a normal i386390253005#390253005#0(175"/Developer/usr/bin/libtool: file: /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/missing.o has no symbols0(0#0#0"8612437920#498"    cd /Users/brunodias/openFrameworks/tests/libs/cpptest/osx    setenv MACOSX_DEPLOYMENT_TARGET 10.6    /Developer/usr/bin/libtool -static -arch_only i386 -syslibroot /Developer/SDKs/MacOSX10.6.sdk -L/Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx -filelist /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/osx.build/Debug/cpptest.build/Objects-normal/i386/cpptest.LinkFileList -o /Users/brunodias/openFrameworks/tests/libs/cpptest/osx/../lib/osx/libcpptest.a0#
+
