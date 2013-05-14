@@ -31,7 +31,7 @@ CPPTEST_HEADERS="-I./libs/cpptest/lib/osx/include"
 LIBRARIES="${GLUT_HEADERS} ${FMODEX_HEADERS} ${FREEIMAGE_HEADERS} ${CAIRO_HEADERS} ${GLEW_HEADERS} ${TESS_HEADERS} ${POCO_HEADERS} ${CPPTEST_HEADERS}"
 
 # FROM_LIB=../Libraries/openframeworks
-OF="../libs/openFrameworks"
+OF="${OF_PATH}/libs/openFrameworks"
 
 OF_3D="-I${OF}/3d"
 OF_APP="-I${OF}/app"
@@ -78,31 +78,50 @@ OF_CORE_LIBS="${LIB_POCO_1} ${LIB_POCO_2} ${LIB_POCO_3} ${LIB_POCO_4} ${LIB_POCO
 
 OF_FRAMEWORKS="-framework ApplicationServices -framework AGL -framework GLUT -framework Carbon -framework OpenGL -framework QuickTime -framework QTKit -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks -iframework/Users/brunodias/openFrameworks/tests/test_template/../../libs/glut/lib/osx"
 
-# Find all tests
-for te in $(ls -A src | grep .cpp); do
-    OUTPUT=$(echo $te | sed -e "s/\.cpp//g")
+if [ -z $1 ]; then
+
+    # Find all tests
+    for te in $(ls -A src | grep .cpp); do
+        OUTPUT=$(echo $te | sed -e "s/\.cpp//g")
+        echo ""
+        echo "Compiling $te > $OUTPUT"
+        echo ""
+        $CC $SRC_DIR/$te ${ARCH} ${CFLAGS} ${OF_FRAMEWORKS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} -o ${BUILD_DIR}/${OUTPUT}
+    done
+
     echo ""
-    echo "Compiling $te > $OUTPUT"
+    echo "Copying .dylib..."
+    cp $LIB_FMODEX $BUILD_DIR
     echo ""
-    $CC $SRC_DIR/$te ${ARCH} ${CFLAGS} ${OF_FRAMEWORKS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} -o ${BUILD_DIR}/${OUTPUT}
-done
 
-echo ""
-echo "Copying .dylib..."
-cp $LIB_FMODEX $BUILD_DIR
-echo ""
+    # Run
 
-# Run
+    echo "Running tests..."
+    echo ""
 
-echo "Running tests..."
-echo ""
+    for te in $(ls -A src | grep .cpp); do
+        OUTPUT=$(echo $te | sed -e "s/\.cpp//g")
+        cd $BUILD_DIR
+        echo "* Running test $OUTPUT..."
+        echo ""
+        ./$OUTPUT
+        echo ""
+        cd ..
+    done
 
-for te in $(ls -A src | grep .cpp); do
-    OUTPUT=$(echo $te | sed -e "s/\.cpp//g")
+else
+    
+    OUTPUT=$(ls $SRC_DIR | grep $1 | sed -e "s/\.cpp//g")
+    echo ""
+    echo "Compiling $1.cpp > $OUTPUT"
+    echo ""
+    $CC $SRC_DIR/$1.cpp ${ARCH} ${CFLAGS} ${OF_FRAMEWORKS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} -o ${BUILD_DIR}/${OUTPUT}
+
     cd $BUILD_DIR
+    echo ""
     echo "* Running test $OUTPUT..."
     echo ""
     ./$OUTPUT
     echo ""
     cd ..
-done
+fi
