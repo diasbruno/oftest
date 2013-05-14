@@ -1,4 +1,4 @@
 oftest
 ======
 
-run all tests in OF core.
+run all automated tests.
