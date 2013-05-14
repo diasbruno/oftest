@@ -1,0 +1,45 @@
+
+#include "cpptest.h"
+
+// include 
+
+// what test 
+// ex: ofColorSuite
+class ofSuite 
+    : public Test::Suite {
+public:
+    
+    ofSuite() {
+        TEST_ADD( ofSuite::test_instantiation )
+    }
+    
+protected:
+    
+    void 
+    setup() {}
+    
+    void 
+    tear_down() {}
+    
+private:
+    
+    void 
+    test_instantiation() {
+        TEST_ASSERT( 1 == 1 )
+    }
+    
+};
+
+int
+main() {
+    static Test::Suite ts_types;
+
+    // change this                             - 
+    ts_types.add( auto_ptr<Test::Suite>( new ofSuite ) );
+
+    Test::TextOutput output( Test::TextOutput::Verbose );
+    
+    ts_types.run( output );
+
+    return 0;
+}
