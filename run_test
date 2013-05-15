@@ -12,7 +12,7 @@ OF_PATH=".."
 SRC_DIR="src"
 # This is used for the GLUT hack,
 # the application looks for the framework in '../frameworks'
-FRAMEWORKS_DIR="src"
+FRAMEWORKS_DIR="frameworks"
 BUILD_DIR="bin"
 DATA_DIR="data"
 
@@ -84,7 +84,7 @@ OF_FRAMEWORKS="-F/Users/brunodias/openFrameworks/libs/glut/lib/osx -framework GL
 echo "" 
 echo "Copying stuff..."
 cp $LIB_FMODEX $BUILD_DIR
-/Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git ../libs/glut/lib/osx/GLUT.framework $FRAMEWORKS_DIR
+cp -r ../libs/glut/lib/osx/GLUT.framework $FRAMEWORKS_DIR/GLUT.framework
 echo ""
 
 function compile {
