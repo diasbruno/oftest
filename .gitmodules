@@ -1,0 +1,3 @@
+[submodule "libs/cpptest/cpptest"]
+	path = libs/cpptest/cpptest
+	url = git://cpptest.git.sourceforge.net/gitroot/cpptest/cpptest
