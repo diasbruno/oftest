@@ -3,17 +3,17 @@ oftest
 
 automated testing for openFrameworks.
 
-clone in the root of your openFrameworks folder.
+clone oftest in the root of your openFrameworks folder.
 
-- running tests
+- compiling and running tests
 
-. runs all tests. 
+. all tests. 
 
-``` ./run_test ```
+``` make all ```
 
-. runs a specific test.
+. a specific test.
 
-``` ./run_test ofFileUtils ```
+``` make TEST=ofColor all ```
 
 - create a new test
 
