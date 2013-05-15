@@ -79,56 +79,51 @@ LIB_OF="${OF_PATH}/libs/openFrameworksCompiled/lib/osx/openFrameworksDebug.a"
 OF_CORE_LIBS="${LIB_POCO_1} ${LIB_POCO_2} ${LIB_POCO_3} ${LIB_POCO_4} ${LIB_POCO_5} ${LIB_POCO_6} ${LIB_POCO_7} ${LIB_POCO_8} ${LIB_POCO_9} ${LIB_POCO_10} ${LIB_TESS} ${LIB_GLEW} ${LIB_CAIRO1} ${LIB_CAIRO2} ${LIB_CAIRO3} ${LIB_FMODEX} ${LIB_RTAUDIO} ${LIB_GLUT} ${LIB_OPENSSL1} ${LIB_OPENSSL2} ${LIB_OF} ${LIB_CPPTEST}"
 
 
-if [ -z $1 ]; then
 OF_FRAMEWORKS="-F/Users/brunodias/openFrameworks/libs/glut/lib/osx -framework GLUT -framework Cocoa -framework ApplicationServices -framework CoreFoundation -framework CoreVideo -framework CoreServices -framework AudioToolbox -framework AGL -framework Carbon -framework OpenGL -framework QuickTime -framework QTKit -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks"
 
-    # Find all tests
-    for te in $(ls -A src | grep .cpp); do
-        OUTPUT=$(echo $te | sed -e "s/\.cpp//g")
-        echo ""
-        echo "Compiling $te > $OUTPUT"
-        echo ""
-        $CC $SRC_DIR/$te ${ARCH} ${CFLAGS} ${OF_FRAMEWORKS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} -o ${BUILD_DIR}/${OUTPUT}
-    done
 echo "" 
 echo "Copying stuff..."
 cp $LIB_FMODEX $BUILD_DIR
 /Developer/Library/PrivateFrameworks/DevToolsCore.framework/Resources/pbxcp -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git ../libs/glut/lib/osx/GLUT.framework $FRAMEWORKS_DIR
 echo ""
 
+function compile {
+    OUTPUT=$(echo $1 | sed -e "s/\.cpp//g")
     echo ""
-    echo "Copying .dylib..."
-    cp $LIB_FMODEX $BUILD_DIR
+    echo "Compiling $1 > $OUTPUT"
     echo ""
+    $CC $SRC_DIR/$1 ${ARCH} ${CFLAGS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} ${OF_FRAMEWORKS} -o ${BUILD_DIR}/${OUTPUT}
+}
 
-    # Run
-
-    echo "Running tests..."
-    echo ""
-
-    for te in $(ls -A src | grep .cpp); do
-        OUTPUT=$(echo $te | sed -e "s/\.cpp//g")
-        cd $BUILD_DIR
-        echo "* Running test $OUTPUT..."
-        echo ""
-        ./$OUTPUT
-        echo ""
-        cd ..
-    done
-
-else
-    
-    OUTPUT=$(ls $SRC_DIR | grep $1 | sed -e "s/\.cpp//g")
-    echo ""
-    echo "Compiling $1.cpp > $OUTPUT"
-    echo ""
-    $CC $SRC_DIR/$1.cpp ${ARCH} ${CFLAGS} ${OF_FRAMEWORKS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} -o ${BUILD_DIR}/${OUTPUT}
-
+function run {
+    OUTPUT=$(echo $1 | sed -e "s/\.cpp//g")
     cd $BUILD_DIR
-    echo ""
     echo "* Running test $OUTPUT..."
     echo ""
     ./$OUTPUT
     echo ""
     cd ..
+}
+
+if [ -z $1 ]; then
+
+    # Find all tests
+    for _test in $(ls -A $SRC_DIR | grep .cpp); do
+        compile $_test
+    done
+
+    # Run
+    echo "Running tests..."
+    echo ""
+
+    for _test in $(ls -A $SRC_DIR | grep .cpp); do
+        run $_test
+    done
+
+else
+
+    PROG=$(ls $SRC_DIR | grep $1 )
+    compile $PROG
+    run $PROG
+
 fi
