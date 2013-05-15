@@ -8,7 +8,7 @@ KISS_HEADERS=-I$(OF_PATH)/libs/kiss/include
 TESS_HEADERS=-I$(OF_PATH)/libs/tess2/include
 POCO_HEADERS=-I$(OF_PATH)/libs/poco/include
 
-CPPTEST_HEADERS=-I./libs/cpptest/lib/osx/include
+CPPTEST_HEADERS=-I./libs/cpptest/lib/include
 
 LIBS_HEADERS=$(GLUT_HEADERS) $(KISS_HEADERS) $(FMODEX_HEADERS) $(FREEIMAGE_HEADERS) $(CAIRO_HEADERS) $(GLEW_HEADERS) $(TESS_HEADERS) $(POCO_HEADERS) $(CPPTEST_HEADERS)
 
