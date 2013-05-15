@@ -52,7 +52,10 @@ start:
 	@echo 
 	@echo Copying stuff...
 	@cp $(LIB_FMODEX) $(BUILD_DIR)
+ifeq "$(PLATFORM)" "Darwin"
 	@cp -r ../libs/glut/lib/osx/GLUT.framework $(FRAMEWORKS_DIR)/GLUT.framework
+endif
+    
 	@echo 
 	
 run_tests:
