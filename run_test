@@ -1,129 +1,32 @@
 #!/bin/bash
 
 echo "Compiling all tests..."
-echo ""
-
-CC="/Developer/usr/bin/llvm-g++-4.2"
-CFLAGS="-Wall -ansi -isysroot /Developer/SDKs/MacOSX10.6.sdk" 
-OTHER_CPLUSPLUSFLAGS="-D__MACOSX_CORE__ -lpthread -mtune=native"
-ARCH="-m32 -arch i386"
-
-OF_PATH=".."
-SRC_DIR="src"
-# This is used for the GLUT hack,
-# the application looks for the framework in '../frameworks'
-FRAMEWORKS_DIR="frameworks"
-BUILD_DIR="bin"
-DATA_DIR="data"
-
-mkdir $FRAMEWORKS_DIR
-mkdir $BUILD_DIR
-mkdir $DATA_DIR
-
-CAIRO_HEADERS="-I${OF_PATH}/libs/cairo/include/cairo"
-FMODEX_HEADERS="-I${OF_PATH}/libs/fmodex/include"
-FREEIMAGE_HEADERS="-I${OF_PATH}/libs/FreeImage/include"
-GLEW_HEADERS="-I${OF_PATH}/libs/glew/include"
-GLUT_HEADERS="-I${OF_PATH}/libs/glut/lib/osx/GLUT.framework/Versions/A/Headers"
-TESS_HEADERS="-I${OF_PATH}/libs/tess2/include"
-POCO_HEADERS="-I${OF_PATH}/libs/poco/include"
-
-CPPTEST_HEADERS="-I./libs/cpptest/lib/osx/include"
-
-LIBRARIES="${GLUT_HEADERS} ${FMODEX_HEADERS} ${FREEIMAGE_HEADERS} ${CAIRO_HEADERS} ${GLEW_HEADERS} ${TESS_HEADERS} ${POCO_HEADERS} ${CPPTEST_HEADERS}"
-
-# FROM_LIB=../Libraries/openframeworks
-OF="${OF_PATH}/libs/openFrameworks"
-
-OF_3D="-I${OF}/3d"
-OF_APP="-I${OF}/app"
-OF_COMMUNICATION="-I${OF}/communication"
-OF_EVENTS="-I${OF}/events"
-OF_GL="-I${OF}/gl"
-OF_GRAPHICS="-I${OF}/graphics"
-OF_MATH="-I${OF}/math"
-OF_SOUND="-I${OF}/sound"
-OF_UTILS="-I${OF}/utils"
-OF_VIDEO="-I${OF}/video"
-OF_TYPES="-I${OF}/types"
-
-OF_HEADERS="-I${OF} ${OF_3D} ${OF_APP} ${OF_COMMUNICATION} ${OF_EVENTS} ${OF_GL} ${OF_GRAPHICS} ${OF_MATH} ${OF_SOUND} ${OF_TYPES} ${OF_UTILS} ${OF_VIDEO}"
-
-LIB_FMODEX="${OF_PATH}/libs/fmodex/lib/osx/libfmodex.dylib"
-LIB_GLUT="${OF_PATH}/libs/glut/lib/osx/GLUT.framework/Versions/A/GLUT"
-LIB_FREEIMAGE="${OF_PATH}/libs/FreeImage/lib/osx/freeimage.a"
-LIB_FREETYPE="${OF_PATH}/libs/freetype/lib/osx/freetype.a"
-LIB_GLEW="${OF_PATH}/libs/glew/lib/osx/glew.a"
-LIB_POCO_1="${OF_PATH}/libs/poco/lib/osx/PocoCrypto.a"
-LIB_POCO_2="${OF_PATH}/libs/poco/lib/osx/PocoData.a"
-LIB_POCO_3="${OF_PATH}/libs/poco/lib/osx/PocoDataODBC.a"
-LIB_POCO_4="${OF_PATH}/libs/poco/lib/osx/PocoDataSQLite.a"
-LIB_POCO_5="${OF_PATH}/libs/poco/lib/osx/PocoFoundation.a"
-LIB_POCO_6="${OF_PATH}/libs/poco/lib/osx/PocoNet.a"
-LIB_POCO_7="${OF_PATH}/libs/poco/lib/osx/PocoNetSSL.a"
-LIB_POCO_8="${OF_PATH}/libs/poco/lib/osx/PocoUtil.a"
-LIB_POCO_9="${OF_PATH}/libs/poco/lib/osx/PocoXML.a"
-LIB_POCO_10="${OF_PATH}/libs/poco/lib/osx/PocoZip.a"
-LIB_RTAUDIO="${OF_PATH}/libs/rtAudio/lib/osx/rtAudio.a"
-LIB_TESS="${OF_PATH}/libs/tess2/lib/osx/tess2.a"
-LIB_CAIRO1="${OF_PATH}/libs/cairo/lib/osx/cairo-script-interpreter.a"
-LIB_CAIRO2="${OF_PATH}/libs/cairo/lib/osx/cairo.a"
-LIB_CAIRO3="${OF_PATH}/libs/cairo/lib/osx/pixman-1.a"
-LIB_OPENSSL1="${OF_PATH}/libs/openssl/lib/osx/crypto.a"
-LIB_OPENSSL2="${OF_PATH}/libs/openssl/lib/osx/ssl.a"
-
-LIB_CPPTEST="./libs/cpptest/lib/osx/libcpptest.a"
-
-LIB_OF="${OF_PATH}/libs/openFrameworksCompiled/lib/osx/openFrameworksDebug.a"
-
-OF_CORE_LIBS="${LIB_POCO_1} ${LIB_POCO_2} ${LIB_POCO_3} ${LIB_POCO_4} ${LIB_POCO_5} ${LIB_POCO_6} ${LIB_POCO_7} ${LIB_POCO_8} ${LIB_POCO_9} ${LIB_POCO_10} ${LIB_TESS} ${LIB_GLEW} ${LIB_CAIRO1} ${LIB_CAIRO2} ${LIB_CAIRO3} ${LIB_FMODEX} ${LIB_RTAUDIO} ${LIB_GLUT} ${LIB_OPENSSL1} ${LIB_OPENSSL2} ${LIB_OF} ${LIB_CPPTEST}"
-
-
-OF_FRAMEWORKS="-F/Users/brunodias/openFrameworks/libs/glut/lib/osx -framework GLUT -framework Cocoa -framework ApplicationServices -framework CoreFoundation -framework CoreVideo -framework CoreServices -framework AudioToolbox -framework AGL -framework Carbon -framework OpenGL -framework QuickTime -framework QTKit -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks"
-
-echo "" 
-echo "Copying stuff..."
-cp $LIB_FMODEX $BUILD_DIR
-cp -r ../libs/glut/lib/osx/GLUT.framework $FRAMEWORKS_DIR/GLUT.framework
-echo ""
-
-function compile {
-    OUTPUT=$(echo $1 | sed -e "s/\.cpp//g")
-    echo ""
-    echo "Compiling $1 > $OUTPUT"
-    echo ""
-    $CC $SRC_DIR/$1 ${ARCH} ${CFLAGS} ${OTHER_CPLUSPLUSFLAGS} ${OF_CORE_LIBS} ${LIBRARIES} ${OF_HEADERS} ${OF_FRAMEWORKS} -o ${BUILD_DIR}/${OUTPUT}
-}
 
 function run {
-    OUTPUT=$(echo $1 | sed -e "s/\.cpp//g")
-    cd $BUILD_DIR
-    echo "* Running test $OUTPUT..."
-    echo ""
-    ./$OUTPUT
+    cd bin
+    ./$1
     echo ""
     cd ..
 }
 
-if [ -z $1 ]; then
 
-    # Find all tests
-    for _test in $(ls -A $SRC_DIR | grep .cpp); do
-        compile $_test
-    done
+
+if [ -z $1 ]; then
 
     # Run
     echo "Running tests..."
     echo ""
 
-    for _test in $(ls -A $SRC_DIR | grep .cpp); do
+    for _test in $(ls -A src | grep .cpp | sed -e "s/\.cpp//g"); do
         run $_test
     done
 
 else
 
-    PROG=$(ls $SRC_DIR | grep $1 )
-    compile $PROG
-    run $PROG
-
+    for _test in $@; do
+        echo ""
+        echo "* Running test $_test..."
+        echo ""
+        run $_test
+    done
 fi
