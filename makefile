@@ -1,27 +1,11 @@
 
-ECHO=echo
-
-OF_PATH=..
-
-OF_LIBS_PATH=$(OF_PATH)/libs/openFrameworks
-OF_LIBS_HEADERS=$(shell ls -d $(OF_LIBS_PATH)/*/)
-OF_HEADERS=-I$(OF_LIBS_PATH)/
 
 SRC_DIR=src
 # This is used for the GLUT hack,
 # the application looks for the framework in '../frameworks'
 FRAMEWORKS_DIR=frameworks
 BUILD_DIR=bin
-DATA_DIR=data
-
-CC="/Developer/usr/bin/llvm-g++-4.2"
-CFLAGS=-Wall -ansi
-OTHER_CPLUSPLUSFLAGS=-D__MACOSX_CORE__ -lpthread -mtune=native
-ARCH=-m32 -arch i386
-
-ifneq "$(OF_LIBS_HEADERS)" ""
-	OF_HEADERS+=$(foreach oflib,$(OF_LIBS_HEADERS),$(addprefix -I, $(oflib)))
-endif
+DATA_DIR=$(BUILD_DIR)/data
 
 # use 
 # make test TEST=ofColor
@@ -35,36 +19,58 @@ endif
 
 # Check platform...
 
-PLATFORM=$(shell uname)
+PLATFORM_NAME=$(shell uname)
+PLATFORM_ARCH=$(shell uname -m)
 
-ifeq "$(PLATFORM)" "Darwin"
-	include of_libs_mac.mk
+# Include openFrameworks stuff
+include of.mk
+
+# Mac specific
+ifeq "$(PLATFORM_NAME)" "Darwin"
+	include osx.mk
+	OS="osx"
 endif
 
-ifeq "$(PLATFORM)" "Linux"
+# Linux specific
+ifeq "$(PLATFORM_NAME)" "Linux"
 	include of_libs_linux.mk
+	OS="linux"
+
+	ifeq "$(PLATFORM_ARCH)" "x86_64"
+		OS+=64
+	endif
 endif
 
-start:
-	@echo Compiling tests...$(TESTS)
+# cpptest headers and Lib
+CPPTEST_H=$(CPPTEST_PATH)/lib/include
+ALL_HEADERS+=-I$(CPPTEST_H)
+
+LIB_CPPTEST=$(CPPTEST_PATH)/lib/osx/libcpptest.a
+ALL_LIBS+=$(LIB_CPPTEST)
+
+system_info:
+	@echo
+	@echo System info - OS"(" $(OS) ")", Arch"(" $(PLATFORM_ARCH) ")"
 	@echo 
-	@mkdir $(FRAMEWORKS_DIR) & mkdir $(BUILD_DIR) & mkdir $(DATA_DIR) &
-	@echo 
-	@echo Copying stuff...
-	@cp $(LIB_FMODEX) $(BUILD_DIR)
-ifeq "$(PLATFORM)" "Darwin"
-	@cp -r ../libs/glut/lib/osx/GLUT.framework $(FRAMEWORKS_DIR)/GLUT.framework
-endif
-    
-	@echo 
-	
+
+create_paths:
+	@echo Creating paths...
+	@mkdir -p $(FRAMEWORKS_DIR) & mkdir -p $(BUILD_DIR) & mkdir -p $(DATA_DIR) &
+
+## Start: 
+## 		Print system info.
+##		try to create path ./bin ./frameworks ./
+start: system_info create_paths copy_libs
+	@echo Compiling tests...
+	@echo $(TESTS)
+
+
 run_tests:
 	@./run_test $(TESTS)
 	
-$(TESTS):
-	@echo
-	@echo Compiling test $@
-	@echo
-	$(CC) $(ARCH) $(CFLAGS) $(OTHER_CPLUSPLUSFLAGS) $(OF_HEADERS) $(LIBS_HEADERS) $(OF_CORE_LIBS) $(OF_FRAMEWORKS) $(SRC_DIR)/$@.cpp -o $(BUILD_DIR)/$@
 
-all: start $(TESTS) run_tests
+clean:
+	@echo Cleaning...
+	@rm -rf $(BUILD_DIR)/*
+
+all: clean start $(TESTS) run_tests
