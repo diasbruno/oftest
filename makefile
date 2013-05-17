@@ -47,7 +47,7 @@ endif
 CPPTEST_H=$(CPPTEST_PATH)/lib/include
 ALL_HEADERS+=-I$(CPPTEST_H)
 
-LIB_CPPTEST=$(CPPTEST_PATH)/lib/osx/libcpptest.a
+LIB_CPPTEST=$(CPPTEST_PATH)/lib/$(OS)/libcpptest.a
 ALL_LIBS+=$(LIB_CPPTEST)
 
 system_info:
