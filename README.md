@@ -5,6 +5,10 @@ automated testing for openFrameworks.
 
 clone oftest in the root of your openFrameworks folder.
 
+
+compile the openFrameworks lib, and then...
+
+
 - compiling and running tests
 
 . all tests. 
