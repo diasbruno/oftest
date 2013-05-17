@@ -96,4 +96,4 @@ copy_libs:
 	@cp -r ../export/$(OS)/libs $(BUILD_DIR)/
 
 $(TESTS):
-	g++ $(ARCH) $(LINUX_H) $(FLAGS) $(CFLAGS) $(LDFLAGS) $(ALL_HEADERS) -g3 src/$@.cpp -o bin/$@ -Wl,-rpath=./libs  $(OF_LIB) $(FILTERED_LIBS) $(FIND_LIBS) $(LINUX_LIBS)
+	g++ $(ARCH) $(LINUX_H) $(FLAGS) $(CFLAGS) $(LDFLAGS) $(ALL_HEADERS) -g3 src/$@.cpp -o bin/$@ -Wl,-rpath=./libs  $(OF_LIB) $(FILTERED_LIBS) $(FIND_LIBS) $(LINUX_LIBS) &> $(LOG_DIR)/$@.log
