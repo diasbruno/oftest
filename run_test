@@ -1,15 +1,15 @@
 #!/bin/bash
 
 echo "Compiling all tests..."
+echo
+
+rm ./results/tests.test
 
 function run {
     cd bin
-    ./$1
-    echo ""
+    ./$1 | grep "$1" >> ../results/tests.test
     cd ..
 }
-
-
 
 if [ -z $1 ]; then
 
@@ -24,9 +24,10 @@ if [ -z $1 ]; then
 else
 
     for _test in $@; do
-        echo ""
         echo "* Running test $_test..."
-        echo ""
         run $_test
     done
 fi
+
+echo ""
+cat ./results/tests.test
