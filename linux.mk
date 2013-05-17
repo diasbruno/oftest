@@ -88,10 +88,7 @@ FIND_LIBS=-L$(FMODEX_PATH)/lib/$(OS) -L$(KISS_PATH)/lib/$(OS) -L../libs/openFram
 copy_libs:
 	@echo
 	@echo Copying stuff...
-
-	@echo $(shell pkg-config "$(PLATFORM_PKG_CONFIG_LIBRARIES)" --libs)
 	@echo
-	@echo $(FILTERED_LIBS)
 
 	@cp -r ../export/$(OS)/libs $(BUILD_DIR)/
 
