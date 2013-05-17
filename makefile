@@ -30,16 +30,16 @@ include of.mk
 # Mac specific
 ifeq "$(PLATFORM_NAME)" "Darwin"
 	include osx.mk
-	OS="osx"
+	OS=osx
 endif
 
 # Linux specific
 ifeq "$(PLATFORM_NAME)" "Linux"
 	include linux.mk
-	OS="linux"
+	OS=linux
 
 	ifeq "$(PLATFORM_ARCH)" "x86_64"
-		OS+=64
+		OS=linux64
 	endif
 endif
 
