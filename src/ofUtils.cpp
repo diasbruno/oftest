@@ -15,7 +15,7 @@ public:
         TEST_ADD( ofUtilsSuite::test_to_string )
         TEST_ADD( ofUtilsSuite::test_string_to_type )
         TEST_ADD( ofUtilsSuite::test_binary_to_type )
-        TEST_ADD( ofUtilsSuite::test_to_hex )
+        TEST_ADD( ofUtilsSuite::test_type_to_hex )
         TEST_ADD( ofUtilsSuite::test_upper_lower )
     }
     
@@ -57,9 +57,9 @@ private:
     }
 
     void 
-    test_to_hex() {
-        
-        TEST_ASSERT( ofToHex( "a" ) == "61" );
+    test_type_to_hex() {
+        // echo -n λ | hexdump -v -e '"" 1/1 \"%02x\"'
+        TEST_ASSERT( ofToHex( "λ" ) == "cebb" );
         TEST_ASSERT( ofToHex( 'a' ) == "61" );
     }
 
