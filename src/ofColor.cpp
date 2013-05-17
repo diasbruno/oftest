@@ -1,7 +1,6 @@
 
+#include "ofMain.h"
 #include "cpptest.h"
-
-#include "ofColor.h"
 
 class ofColorSuite 
     : public Test::Suite {
@@ -9,15 +8,15 @@ public:
     
     ofColorSuite() {
         TEST_ADD( ofColorSuite::test_instantiation )
+        TEST_ADD( ofColorSuite::test_getters )
     }
     
-    ofColor tColor;
+    ofColor color;
     
 protected:
     
     void 
-    setup() {
-    }
+    setup() {}
     
     void 
     tear_down() {}
@@ -26,37 +25,58 @@ private:
     
     void 
     test_instantiation() {
-
-        tColor.r = 0.0;
-        tColor.g = 0.0;
-        tColor.b = 0.0;
-        tColor.a = 0.0;
-
-        TEST_ASSERT( tColor.r == 0.0 )
-        TEST_ASSERT( tColor.g == 0.0 )
-        TEST_ASSERT( tColor.b == 0.0 )
-        TEST_ASSERT( tColor.a == 0.0 )
-        
-        tColor.set( ofColor_<float>::blue );
-        
-        TEST_ASSERT( tColor.r == 0.0 )
-        TEST_ASSERT( tColor.g == 0.0 )
-        TEST_ASSERT( tColor.b == 255.0 )
-        TEST_ASSERT( tColor.a == 255.0 )
+        TEST_ASSERT( color.r == ofColor::limit() )
+        TEST_ASSERT( color.g == ofColor::limit() )
+        TEST_ASSERT( color.b == ofColor::limit() )
+        TEST_ASSERT( color.a == ofColor::limit() )
     }
     
+    void
+    test_getters() {
+		TEST_ASSERT( color.getHex() == 16777215 )
+		TEST_ASSERT( color.getInverted().getHex() == 0 )
+        
+        color.r = -1.0;
+        color.g = -1.0;
+        color.b = -1.0;
+        color.a = -1.0;
+        ofColor c = color.getClamped();
+        TEST_ASSERT( color.r == 0 )
+        TEST_ASSERT( color.g == 0 )
+        TEST_ASSERT( color.b == 0 )
+        TEST_ASSERT( color.a == 0 )
+
+        color.r = 256.0;
+        color.g = 256.0;
+        color.b = 256.0;
+        color.a = 256.0;
+        c = color.getClamped();
+        TEST_ASSERT( color.r == ofColor::limit() )
+        TEST_ASSERT( color.g == ofColor::limit() )
+        TEST_ASSERT( color.b == ofColor::limit() )
+        TEST_ASSERT( color.a == ofColor::limit() )
+		/*
+        ofColor_<PixelType> getClamped () const;
+		ofColor_<PixelType> getInverted () const;
+		ofColor_<PixelType> getNormalized () const;
+		ofColor_<PixelType> getLerped(const ofColor_<PixelType>& target, float amount) const;
+		
+		float getHue () const;
+		float getSaturation () const;
+		float getBrightness () const; // brightest component
+		float getLightness () const; // average of the components
+		void getHsb(float& hue, float& saturation, float& brightness) const;
+        */
+    }
 };
 
 int
 main() {
     Test::Suite ts_types;
+
     ts_types.add( auto_ptr<Test::Suite>( new ofColorSuite ) );
 
-    Test::TextOutput text( Test::TextOutput::Verbose );
-    Test::CompilerOutput compiler( Test::CompilerOutput::GCC, std::cout );
+    Test::TextOutput output( Test::TextOutput::Verbose );
     
-    ts_types.run( compiler );
-    ts_types.run( text );
-
-    return 0;
+    return ts_types.run( output );
 }

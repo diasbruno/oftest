@@ -54,13 +54,11 @@ private:
 
 int
 main() {
-    static Test::Suite ts_types;
+    Test::Suite ts_types;
 
     ts_types.add( auto_ptr<Test::Suite>( new ofImageSuite ) );
 
     Test::TextOutput output( Test::TextOutput::Verbose );
     
-    ts_types.run( output );
-
-    return 0;
+    return ts_types.run( output );
 }

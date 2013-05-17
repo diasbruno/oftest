@@ -88,15 +88,11 @@ private:
 
 int
 main() {
-
     Test::Suite ts_types;
-    
-    // change this                             - 
-    ts_types.add( std::auto_ptr<Test::Suite>( new ofThreadSuite ) );
 
-    Test::TextOutput text( Test::TextOutput::Verbose );
-    
-    ts_types.run( text );
+    ts_types.add( auto_ptr<Test::Suite>( new ofThreadSuite ) );
 
-    return 0;
+    Test::TextOutput output( Test::TextOutput::Verbose );
+    
+    return ts_types.run( output );
 }
