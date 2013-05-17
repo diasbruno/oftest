@@ -35,7 +35,7 @@ endif
 
 # Linux specific
 ifeq "$(PLATFORM_NAME)" "Linux"
-	include of_libs_linux.mk
+	include linux.mk
 	OS="linux"
 
 	ifeq "$(PLATFORM_ARCH)" "x86_64"
