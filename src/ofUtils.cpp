@@ -53,7 +53,7 @@ private:
     void
     test_binary_to_type() {
         TEST_ASSERT( ofBinaryToInt( "00000001" ) == 1 )
-        TEST_ASSERT( ofBinaryToFloat( "00000111" ) == 7.f )
+        TEST_ASSERT( ofBinaryToFloat( "01000000111000000000000000000000" ) == 7.f )
     }
 
     void 
