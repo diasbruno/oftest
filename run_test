@@ -7,7 +7,7 @@ rm ./results/tests.test
 
 function run {
     cd bin
-    ./$1 | grep "$1" >> ../results/tests.test
+    ./$1 >> ../results/tests.test
     cd ..
 }
 
