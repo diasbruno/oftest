@@ -60,11 +60,12 @@ public:
 
     void 
     setup() {
+        ofBackground( 255, 255 );
         ts_types.add( auto_ptr<Test::Suite>( new ofSystemUtilsSuite ) );
     }
     void
     draw() {
-        if ( ofGetElapsedTimef() < 10000 ) {
+        if ( ofGetElapsedTimef() > 2 ) {
             runTests();
         }
     }
