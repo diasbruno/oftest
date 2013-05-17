@@ -62,7 +62,9 @@ ALL_LIBS=$(shell find $(OF_LIBS_PATH)/*/lib/$(OS) -name "*.a")
 ALL_LIBS+=$(shell find $(OF_LIBS_PATH)/*/lib/$(OS) -name "*.dylib") 
 
 # Find openframeworks lib for os specific
-ALL_LIBS+=$(shell find $(OF_LIBS_PATH)/openFrameworksCompiled/lib/$(OS) -name "*.a") 
+# (...and here we test our powers of observation.)
+OF_LIB=$(shell find $(OF_LIBS_PATH)/openFrameworksCompiled/lib/$(OS) -name "*.a") 
+ALL_LIBS+=$(OF_LIB)
 
 of_libs:
 	@echo $(POCO_PATH)/lib/$(OS)
