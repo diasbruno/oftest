@@ -1,0 +1,7 @@
+#!/bin/bash
+
+OF=($(find ../libs/openframeworks -name "*.h"))
+NUM_H=${#OF[@]}
+NUMBER=$[ ( $RANDOM % NUM_H ) ]
+
+echo ${OF[NUMBER]}
