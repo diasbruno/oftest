@@ -6,6 +6,7 @@ SRC_DIR=src
 FRAMEWORKS_DIR=frameworks
 BUILD_DIR=bin
 DATA_DIR=$(BUILD_DIR)/data
+RESULTS_DIR=results
 
 # use 
 # make test TEST=ofColor
@@ -55,7 +56,7 @@ system_info:
 
 create_paths:
 	@echo Creating paths...
-	@mkdir -p $(FRAMEWORKS_DIR) & mkdir -p $(BUILD_DIR) & mkdir -p $(DATA_DIR) &
+	@mkdir -p $(FRAMEWORKS_DIR) & mkdir -p $(BUILD_DIR) & mkdir -p $(DATA_DIR) & mkdir -p $(RESULTS_DIR) &
 
 ## Start: 
 ## 		Print system info.
