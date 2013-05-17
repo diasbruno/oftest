@@ -1,4 +1,5 @@
 
+#include "ofMain.h"
 #include "cpptest.h"
 
 // include 
@@ -11,7 +12,7 @@ class {WHAT}Suite
 public:
     
     {WHAT}Suite() {
-        TEST_ADD( {WHAT}Suite::test_instantiation )
+        TEST_ADD( {WHAT}Suite::test_ )
     }
     
 protected:
@@ -25,7 +26,7 @@ protected:
 private:
     
     void 
-    test_instantiation() {
+    test_() {
         TEST_ASSERT( 1 == 1 )
     }
     
@@ -33,13 +34,11 @@ private:
 
 int
 main() {
-    static Test::Suite ts_types;
+    Test::Suite ts_types;
 
     ts_types.add( auto_ptr<Test::Suite>( new {WHAT}Suite ) );
 
     Test::TextOutput output( Test::TextOutput::Verbose );
     
-    ts_types.run( output );
-
-    return 0;
+    return ts_types.run( output );
 }
