@@ -13,8 +13,10 @@ LOG_DIR=log
 # make test TEST=ofColor
 # to make a single test
 TEST?=
-TESTS=$(shell ls -A $(SRC_DIR) | grep .cpp | sed -e "s/\.cpp//g")
+TESTS=$(shell ls $(SRC_DIR) | sed -e "/*\.cpp/g" | sed -e 's/\.cpp//g')
 
+# if you set TEST=test
+# TESTS will be discaded.
 ifneq "$(TEST)" ""
 	TESTS=$(TEST)
 endif
