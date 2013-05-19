@@ -1,4 +1,6 @@
-LINUX_LIBS=-lfmodex -lfreeimage -lgtk-x11-2.0 -lgdk-x11-2.0 -lpangocairo-1.0 -latk-1.0 -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lpangoft2-1.0 -lpango-1.0 -lgobject-2.0 -lglib-2.0 -lfreetype -lfontconfig  -L/usr/lib -ljack -lpthread -lrt -lGLU -lGL -lGLEW -lgstvideo-1.0 -lgstapp-1.0 -lgstbase-1.0 -lgstreamer-1.0 -lgobject-2.0 -lgmodule-2.0 -pthread -lrt -lgthread-2.0 -pthread -lrt -lglib-2.0 -ludev -lrt -lcairo -lz  -lglut -lGL -lasound -lopenal -lsndfile -lvorbis -lFLAC -logg -lfreeimage -lportaudio -lfreetype $(LIB_CPPTEST)
+LINUX_LIBS=-lfmodex -lfreeimage -lgtk-x11-2.0 -lgdk-x11-2.0 -lpangocairo-1.0 -latk-1.0 -lcairo -lgdk_pixbuf-2.0 -lgio-2.0 -lpangoft2-1.0 -lpango-1.0 -lgobject-2.0 -lglib-2.0 -lfreetype -lfontconfig  -L/usr/lib -ljack -lpthread -lrt -lGLU -lGL -lGLEW  -lgobject-2.0 -lgmodule-2.0 -pthread -lrt -lgthread-2.0 -pthread -lrt -lglib-2.0 -ludev -lrt -lcairo -lz  -lglut -lGL -lasound -lopenal -lsndfile -lvorbis -lFLAC -logg -lfreeimage -lportaudio -lfreetype $(LIB_CPPTEST)
+
+# -lgstvideo-1.0 -lgstapp-1.0 -lgstbase-1.0 -lgstreamer-1.0
 
 CC=g++
 CFLAGS=-Wall -fexceptions -pthread -g3 
