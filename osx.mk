@@ -41,4 +41,4 @@ $(TESTS):
 	@echo
 	@echo Compiling test $@
 	@echo
-	$(CC) $(ARCH) $(CFLAGS) $(OTHER_CPLUSPLUSFLAGS) $(ALL_HEADERS) $(ALL_LIBS) $(OF_FRAMEWORKS) $(SRC_DIR)/$@.cpp -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log
+	$(CC) $(ARCH) $(CFLAGS) $(OTHER_CPLUSPLUSFLAGS) $(ALL_HEADERS) $(ALL_LIBS) $(OF_FRAMEWORKS) $(SRC_DIR)/test_$@.cpp -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log

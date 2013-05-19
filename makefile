@@ -10,10 +10,10 @@ RESULTS_DIR=results
 LOG_DIR=log
 
 # use 
-# make test TEST=ofColor
+# make TEST=ofColor all
 # to make a single test
 TEST?=
-TESTS=$(shell ls $(SRC_DIR) | sed -e "/*\.cpp/g" | sed -e 's/\.cpp//g')
+TESTS=$(shell ls $(SRC_DIR) | grep test_* | sed -e 's/test_//g' | sed -e 's/\.cpp//g')
 
 # if you set TEST=test
 # TESTS will be discaded.
@@ -55,6 +55,7 @@ ALL_LIBS+=$(LIB_CPPTEST)
 system_info:
 	@echo
 	@echo System info - OS"(" $(OS) ")", Arch"(" $(PLATFORM_ARCH) ")"
+	@echo $(TESTS)
 	@echo 
 
 create_paths:
