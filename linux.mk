@@ -83,7 +83,8 @@ ALL_HEADERS+=$(foreach HEADER,$(LIBS_H),$(addprefix -I,$(HEADER)))
 FILTERED_LIBS=$(foreach LIB,$(ALL_LIBS),$(shell echo $(LIB) | grep -v "Poco"))
 FILTERED_LIBS+=$(POCO_PATH)/lib/$(OS)/libPocoNet.a $(POCO_PATH)/lib/$(OS)/libPocoXML.a $(POCO_PATH)/lib/$(OS)/libPocoUtil.a $(POCO_PATH)/lib/$(OS)/libPocoFoundation.a
 
-FIND_LIBS=-L$(FMODEX_PATH)/lib/$(OS) -L$(KISS_PATH)/lib/$(OS) -L../libs/openFrameworksCompiled/lib/linux64 -L$(POCO_PATH)/lib/$(OS) -L$(RTAUDIO_PATH)/lib/$(OS) -L$(TESS_PATH)/lib/$(OS)
+FIND_LIBS=-L../libs/openFrameworksCompiled/lib/$(OS)
+FIND_LIBS+=-L$(FMODEX_PATH)/lib/$(OS) -L$(KISS_PATH)/lib/$(OS)  -L$(POCO_PATH)/lib/$(OS) -L$(RTAUDIO_PATH)/lib/$(OS) -L$(TESS_PATH)/lib/$(OS)
 
 copy_libs:
 	@echo
