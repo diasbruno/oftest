@@ -23,6 +23,8 @@ if [ -z $1 ]; then
 
 else
 
+    ls bin
+
     for _test in $@; do
         echo "* Running test $_test..."
         run $_test
