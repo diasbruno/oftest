@@ -11,10 +11,10 @@ OF_LIBS_PATH=$(OF_PATH)/libs
 ASSIMP_PATH=$(OF_LIBS_PATH)/assimp
 CAIRO_PATH=$(OF_LIBS_PATH)/cairo
 FMODEX_PATH=$(OF_LIBS_PATH)/fmodex
-FREEIMAGE_PATH=-I$(OF_LIBS_PATH)/FreeImage
-FREETYPE_PATH=-I$(OF_LIBS_PATH)/freetype
+FREEIMAGE_PATH=$(OF_LIBS_PATH)/FreeImage
+FREETYPE_PATH=$(OF_LIBS_PATH)/freetype
 GLEW_PATH=$(OF_LIBS_PATH)/glew
-GLU_PATH=$(GLEW_PATH)/libs/glu
+GLU_PATH=$(OF_LIBS_PATH)/libs/glu
 GLUT_PATH=$(OF_LIBS_PATH)/glut
 KISS_PATH=$(OF_LIBS_PATH)/kiss
 POCO_PATH=$(OF_LIBS_PATH)/poco
@@ -39,11 +39,11 @@ OF_MORE_H=$(shell ls $(OF_BASE_H) | grep -v "\.")
 OF_H=$(OF_BASE_H) $(foreach HEADER,$(OF_MORE_H),$(addprefix $(OF_BASE_H)/,$(HEADER)))
 
 # Others headers
-ASSIMP_H=$(OF_LIBS_PATH)/include
+ASSIMP_H=$(ASSIMP_PATH)/include
 CAIRO_H=$(CAIRO_PATH)/include/cairo
 FMODEX_H=$(FMODEX_PATH)/include
 FREEIMAGE_H=$(FREEIMAGE_PATH)/include
-FREETYPE_H=-I$(OF_LIBS_PATH)/include
+FREETYPE_H=$(FREETYPE_PATH)/include
 GLEW_H=$(GLEW_PATH)/include
 GLU_H=$(GLU_PATH)/libs/glu/include
 GLUT_H=$(GLUT_PATH)/libs/glut
@@ -58,13 +58,8 @@ VIDEOINPUT_H=$(VIDEOINPUT_PATH)/include
 # Libs
 #
 
-ALL_LIBS=$(shell find $(OF_LIBS_PATH)/*/lib/$(OS) -name "*.a") 
+ALL_LIBS=$(shell find $(OF_LIBS_PATH)/*/lib/$(OS) -name "*.a" | grep -v "Poco") 
 ALL_LIBS+=$(shell find $(OF_LIBS_PATH)/*/lib/$(OS) -name "*.dylib") 
-
-# Find openframeworks lib for os specific
-# (...and here we test our powers of observation.)
-OF_LIB=$(shell find $(OF_LIBS_PATH)/openFrameworksCompiled/lib/$(OS) -name "*.a") 
-ALL_LIBS+=$(OF_LIB)
 
 of_libs:
 	@echo $(POCO_PATH)/lib/$(OS)

@@ -1,0 +1,6 @@
+bin/**
+frameworks/**
+log/**
+results/**
+*.o
+*.d
