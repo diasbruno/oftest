@@ -84,7 +84,7 @@ $(TESTS):
          -MMD -MP -MF $(SRC_DIR)/$@.d -MT $(SRC_DIR)/$@.o \
 		 -o $(SRC_DIR)/$@.o -c $(SRC_DIR)/test_$@.cpp &> $(LOG_DIR)/$@.log
 
-	$(CC) $(ARCH) $(SRC_DIR)/$@.o $(LFLAGS) \
+	$(CC) $(SRC_DIR)/$@.o $(ARCH) $(LFLAGS) \
 		 -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log
 
 all: clean start $(TESTS) run_tests

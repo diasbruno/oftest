@@ -58,7 +58,7 @@ VIDEOINPUT_H=$(VIDEOINPUT_PATH)/include
 # Libs
 #
 
-ALL_LIBS=$(shell find $(OF_LIBS_PATH)/*/lib/$(OS) -name "*.a") 
+ALL_LIBS=$(shell find $(OF_LIBS_PATH)/*/lib/$(OS) -name "*.a" | grep -v "Poco") 
 ALL_LIBS+=$(shell find $(OF_LIBS_PATH)/*/lib/$(OS) -name "*.dylib") 
 
 of_libs:
