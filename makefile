@@ -46,11 +46,8 @@ ifeq "$(PLATFORM_NAME)" "Linux"
 endif
 
 # cpptest headers and Lib
-CPPTEST_H=$(CPPTEST_PATH)/lib/include
-ALL_HEADERS+=-I$(CPPTEST_H)
-
-LIB_CPPTEST=$(CPPTEST_PATH)/lib/$(OS)/libcpptest.a
-ALL_LIBS+=$(LIB_CPPTEST)
+CFLAGS+=-I$(CPPTEST_PATH)/lib/include
+LFLAGS+=$(CPPTEST_PATH)/lib/$(OS)/libcpptest.a
 
 system_info:
 	@echo
@@ -77,5 +74,16 @@ run_tests:
 clean:
 	@echo Cleaning...
 	@rm -rf $(BUILD_DIR)/*
+
+$(TESTS):
+	@echo
+	@echo Compiling test $@
+	@echo
+	# compile
+	$(CC) $(ARCH) -c $(CFLAGS) \
+		$(SRC_DIR)/test_$@.cpp -o $(SRC_DIR)/$@.o &> $(LOG_DIR)/$@.log
+	# link
+	$(CC) $(ARCH) $(LFLAGS) \
+		$(SRC_DIR)/$@.o -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log
 
 all: clean start $(TESTS) run_tests
