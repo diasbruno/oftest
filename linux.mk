@@ -75,24 +75,26 @@ LIBS_H+=$(GLEW_H) $(GLUT_H) $(KISS_H) $(PORTAUDIO_H) $(RTAUDIO_H) $(TESS_H) $(VI
 
 # Refold header with flag -I
 CFLAGS=$(OTHER_CFLAGS) $(OTHER_CPLUSPLUSFLAGS) $(FLAGS)
-CFLAGS+= $(shell pkg-config "$(PLATFORM_PKG_CONFIG_LIBRARIES)" --cflags)
+CFLAGS+=$(shell pkg-config "$(PLATFORM_PKG_CONFIG_LIBRARIES)" --cflags)
 CFLAGS+=$(foreach HEADER,$(LIBS_H),$(addprefix -I,$(HEADER)))
 CFLAGS+=$(foreach HEADER,$(OF_H),$(addprefix -I,$(HEADER)))
 
 
 # Don't allow PocoNet.a
 NOT_POCO_LIBS=$(shell echo "$(ALL_LIBS)" | grep -v "Poco" )
-POCO_LIBS=-L$(POCO_PATH)/lib/$(OS) $(POCO_PATH)/lib/$(OS)/libPocoNet.a $(POCO_PATH)/lib/$(OS)/libPocoXML.a $(POCO_PATH)/lib/$(OS)/libPocoUtil.a $(POCO_PATH)/lib/$(OS)/libPocoFoundation.a $(POCO_PATH)/lib/$(OS)/libPocoNetSSL.a
+POCO_LIBS=-lPocoCrypto -lPocoNetSSL -lPocoNet -lPocoXML -lPocoFoundation -lPocoUtil
 
 FIND_LIBS=
 FIND_LIBS+=-L$(FMODEX_PATH)/lib/$(OS) -L$(KISS_PATH)/lib/$(OS) -L$(RTAUDIO_PATH)/lib/$(OS) -L$(TESS_PATH)/lib/$(OS)
 # 
 
 LFLAGS+=-Wl,-rpath=./libs 
+LFLAGS+=$(shell pkg-config "$(PLATFORM_PKG_CONFIG_LIBRARIES)" --libs) -lfreeimage -lfmodex -lFLAC -logg -lglut -lvorbis -ljack # -lcpptest
+LFLAGS+=-L../libs/openFrameworksCompiled/lib/$(OS) -lopenFrameworksDebug $(ALL_LIBS)
+LFLAGS+=-L$(POCO_PATH)/lib/$(OS) $(POCO_LIBS)
 #$(POCO_LIBS)
-LFLAGS+=-L../libs/openFrameworksCompiled/lib/$(OS) -lopenFrameworksDebug  $(ALL_LIBS)
-LFLAGS+=$(FIND_LIBS) $(NOT_POCO_LIBS) $(POCO_LIBS)
-LFLAGS+=$(shell pkg-config "$(PLATFORM_PKG_CONFIG_LIBRARIES)" --libs) -lfreeimage -lfmodex -lFLAC -logg -lglut -lvorbis -ljack -lcpptest
+LFLAGS+=$(FIND_LIBS) $(NOT_POCO_LIBS) 
+
 copy_libs:
 	@echo
 	@echo Copying stuff...

@@ -79,11 +79,12 @@ $(TESTS):
 	@echo
 	@echo Compiling test $@
 	@echo
-	# compile
-	$(CC) $(ARCH) -c $(CFLAGS) \
-		$(SRC_DIR)/test_$@.cpp -o $(SRC_DIR)/$@.o &> $(LOG_DIR)/$@.log
-	# link
-	$(CC) $(ARCH) $(LFLAGS) \
-		$(SRC_DIR)/$@.o -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log
+
+	$(CC) $(ARCH) $(CFLAGS) \
+         -MMD -MP -MF $(SRC_DIR)/$@.d -MT $(SRC_DIR)/$@.o \
+		 -o $(SRC_DIR)/$@.o -c $(SRC_DIR)/test_$@.cpp &> $(LOG_DIR)/$@.log
+
+	$(CC) $(ARCH) $(SRC_DIR)/$@.o $(LFLAGS) \
+		 -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log
 
 all: clean start $(TESTS) run_tests
