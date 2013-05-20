@@ -10,10 +10,10 @@ RESULTS_DIR=results
 LOG_DIR=log
 
 # use 
-# make test TEST=ofColor
+# make TEST=ofColor all
 # to make a single test
 TEST?=
-TESTS=$(shell ls $(SRC_DIR) | sed -e "/*\.cpp/g" | sed -e 's/\.cpp//g')
+TESTS=$(shell ls $(SRC_DIR) | grep .cpp | sed -e 's/test_//g' | sed -e 's/\.cpp//g')
 
 # if you set TEST=test
 # TESTS will be discaded.
@@ -46,15 +46,13 @@ ifeq "$(PLATFORM_NAME)" "Linux"
 endif
 
 # cpptest headers and Lib
-CPPTEST_H=$(CPPTEST_PATH)/lib/include
-ALL_HEADERS+=-I$(CPPTEST_H)
-
-LIB_CPPTEST=$(CPPTEST_PATH)/lib/$(OS)/libcpptest.a
-ALL_LIBS+=$(LIB_CPPTEST)
+CFLAGS+=-I$(CPPTEST_PATH)/lib/include
+LFLAGS+=$(CPPTEST_PATH)/lib/$(OS)/libcpptest.a
 
 system_info:
 	@echo
 	@echo System info - OS"(" $(OS) ")", Arch"(" $(PLATFORM_ARCH) ")"
+	@echo $(TESTS)
 	@echo 
 
 create_paths:
@@ -76,5 +74,17 @@ run_tests:
 clean:
 	@echo Cleaning...
 	@rm -rf $(BUILD_DIR)/*
+
+$(TESTS):
+	@echo
+	@echo Compiling test $@
+	@echo
+
+	$(CC) $(ARCH) $(CFLAGS) \
+         -MMD -MP -MF $(SRC_DIR)/$@.d -MT $(SRC_DIR)/$@.o \
+		 -o $(SRC_DIR)/$@.o -c $(SRC_DIR)/test_$@.cpp &> $(LOG_DIR)/$@.log
+
+	$(CC) $(SRC_DIR)/$@.o $(ARCH) $(LFLAGS) \
+		 -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log
 
 all: clean start $(TESTS) run_tests

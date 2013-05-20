@@ -1,6 +1,6 @@
 
 CC="/Developer/usr/bin/llvm-g++-4.2"
-CFLAGS=-Wall -ansi
+OTHER_CFLAGS=-Wall -ansi
 OTHER_CPLUSPLUSFLAGS=-D__MACOSX_CORE__ -lpthread -mtune=native
 ARCH=-m32 -arch i386
 
@@ -30,15 +30,12 @@ OF_FRAMEWORKS+=-framework AudioToolbox -framework AGL -framework Carbon
 OF_FRAMEWORKS+=-framework OpenGL -framework QuickTime -framework QTKit 
 OF_FRAMEWORKS+=-F/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks
 
+CFLAGS=$(OTHER_CFLAGS) $(OTHER_CPLUSPLUSFLAGS) $(ALL_HEADERS)
+LFLAGS=$(ALL_LIBS) $(strip $(OF_FRAMEWORKS))
+
 copy_libs:
 	@echo 
 	@echo Copying stuff...
 
 	@cp $(LIB_FMODEX) $(BUILD_DIR)
 	@cp -r ../libs/glut/lib/osx/GLUT.framework $(FRAMEWORKS_DIR)/GLUT.framework
-
-$(TESTS):
-	@echo
-	@echo Compiling test $@
-	@echo
-	$(CC) $(ARCH) $(CFLAGS) $(OTHER_CPLUSPLUSFLAGS) $(ALL_HEADERS) $(ALL_LIBS) $(OF_FRAMEWORKS) $(SRC_DIR)/$@.cpp -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log
