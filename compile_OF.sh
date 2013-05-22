@@ -35,9 +35,9 @@ export LC_ALL=C
 
 ARCH=$(uname -m)
 if [ "$ARCH" = "x86_64" ]; then
-        LIBSPATH=linux64
+    LIBSPATH=linux64
 else
-        LIBSPATH=linux
+    LIBSPATH=linux
 fi
 
 WHO=`who am i`;ID=`echo ${WHO%% *}`
