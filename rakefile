@@ -192,17 +192,6 @@ task :before  do
 
     system "mkdir -p #{OFTEST_LOG}"
     
-    if /linux/.match( OS )
-    
-        compiled = system "sudo ./compile_OF.sh &> #{OFTEST_LOG}/of.log"
-        print "Compiling OF...".cyan
-        if compiled
-            puts "[Ok]".green
-        else
-            puts "[Fail]".red
-        end
-    end
-
     # First we compile.
     Rake::Task[ :compile_tests ].execute()
     Rake::Task[ "#{OS}:before" ].execute( TARGETS  )
