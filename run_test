@@ -2,6 +2,9 @@
 
 RAKE=$(which rake)
 
+# Get colorator, beacuse i need colors.
+sudo gem install colorator
+
 TESTS=""
 if [ $# -eq 0 ]; then
     rake
