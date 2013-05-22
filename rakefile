@@ -104,6 +104,16 @@ end
 # 
 task :setup do
     puts "Setting up the environment...".cyan
+    if not ENV['CXX'].eql? ""
+        CXX = ENV['CXX']
+    else
+        CXX ="g++"
+    end
+    if not ENV['CC'].eql? ""
+        CC  = ENV['CC']
+    else
+        CC  = "gcc"
+    end
 
     # System
     PLATFORM_NAME = %x[ uname ].sub( "\n", "" )
