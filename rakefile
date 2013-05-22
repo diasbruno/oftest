@@ -1,6 +1,6 @@
 # Headers
 require 'rubygems'
-require 'bundle/setup'
+require 'bundler/setup'
 require 'colorator'
 
 require './oftest/osx'
