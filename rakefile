@@ -1,4 +1,5 @@
 # Headers
+require 'rubygems'
 require 'colorator'
 require './oftest/osx'
 require './oftest/linux'
