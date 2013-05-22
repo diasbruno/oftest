@@ -13,6 +13,7 @@ namespace :linux do
     # Set up all compiler stuff
     #
     task :setup do
+        CXX = "g++"
         OTHER_FLAGS = "-march=native -mtune=native -Wall -fexceptions -pthread"
         
         # System check
