@@ -13,7 +13,8 @@ namespace :linux64 do
     # Set up all compiler stuff
     #
     task :setup do
-        CXX = "g++"
+        puts "Setting up for linux64 build...".cyan
+
         OTHER_FLAGS = "-march=native -mtune=native -Wall -fexceptions -pthread"
         
         # System check

@@ -15,8 +15,6 @@ namespace :osx do
     #
     task :setup do
 
-        CXX="g++"
-
         # Define CFLAGS
         #
         OTHER_FLAGS = "-m32 -arch i386 -Wall -ansi -D__MACOSX_CORE__ -mtune=native -fexceptions"
