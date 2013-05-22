@@ -13,11 +13,13 @@ compile the openFrameworks lib, and then...
 
 . all tests. 
 
-``` make all ```
+``` rake ```
+``` rake test ```
 
-. a specific test.
+. a specific test. (list of tests)
 
-``` make TEST=ofColor all ```
+``` rake test["ofColor ofImage of..."] ```
+``` ./run_test ofColor ofImage of... # life is short. ```
 
 - create a new test
 
