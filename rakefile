@@ -95,6 +95,8 @@ task :test, [ :args ] => [ :setup ] do | t, args |
         TARGETS = ts.split(" ")
     end
 
+    # FIXME: glue all...
+    Rake::Task[ :before ].execute()
 end
 
 # Set up the environment
@@ -157,11 +159,6 @@ task :setup do
 
     OFTEST_PREFIX = "test_"
 
-    # FIXME: glue all...
-    Rake::Task[ :before ].execute()
-    # First we compile.
-    Rake::Task[ :compile_tests ].execute()
-    Rake::Task[ :after ].execute()
 end
 
 # Clean up
@@ -206,7 +203,10 @@ task :before  do
         end
     end
 
+    # First we compile.
+    Rake::Task[ :compile_tests ].execute()
     Rake::Task[ "#{OS}:before" ].execute( TARGETS  )
+    Rake::Task[ :after ].execute()
 end
 
 # Before everything
