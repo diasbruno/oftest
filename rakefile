@@ -197,7 +197,7 @@ task :before  do
     if /linux/.match( OS )
     
         Dir.chdir( "../scripts/linux" ) do
-            compiled = system "sudo ./compileOF.sh >& #{OFTEST_LOG}/of.log"
+            compiled = system "sudo ./compileOF.sh &> #{OFTEST_LOG}/of.log"
             print "Compiling OF...".cyan
             if compiled
                 puts "[Ok]".green
