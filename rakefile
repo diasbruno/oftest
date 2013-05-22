@@ -5,6 +5,7 @@ require 'colorator'
 
 require './oftest/osx'
 require './oftest/linux'
+require './oftest/linux64'
 require './oftest/utils'
 require './oftest/run'
 
