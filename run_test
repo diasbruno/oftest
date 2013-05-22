@@ -1,35 +1,19 @@
 #!/bin/bash
 
-echo "Compiling all tests..."
-echo
+RAKE=$(which rake)
 
-rm ./results/tests.test
-
-function run {
-    cd bin
-    ./$1 >> ../results/tests.test
-    cd ..
-}
-
-if [ -z $1 ]; then
-
-    # Run
-    echo "Running tests..."
-    echo ""
-
-    for _test in $(ls -A src | grep .cpp | sed -e "s/\.cpp//g"); do
-        run $_test
-    done
-
+TESTS=""
+if [ $# -eq 0 ]; then
+    rake
 else
-
-    ls bin
-
     for _test in $@; do
-        echo "* Running test $_test..."
-        run $_test
+        TESTS="${TESTS} ${_test}"
     done
-fi
+    unset $_test
 
-echo ""
-cat ./results/tests.test
+    TESTS="${TESTS}"
+    # strip
+    TESTS=$(echo $TESTS | sed -e "s/^ *]?//g" -e "s/* $//g" )
+
+    rake test["${TESTS}"]
+fi
