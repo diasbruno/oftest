@@ -33,7 +33,7 @@ private:
     
     void
     test_getters() {
-		TEST_ASSERT( color.getHex() == 16777215 )
+		TEST_ASSERT( color.getHex() == 1677721/*5*/ )
 		TEST_ASSERT( color.getInverted().getHex() == 0 )
         
         color.r = -1.0;

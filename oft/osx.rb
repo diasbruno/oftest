@@ -1,5 +1,5 @@
 require 'colorator'
-require './oftest/utils'
+require './oft/utils'
 
 namespace :osx do
 

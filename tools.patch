@@ -1,0 +1,1087 @@
+From 19115760da02c1702f0e0beeb8bfa10c698118ff Mon Sep 17 00:00:00 2001
+From: Bruno Dias <contact@diasbruno.com.br>
+Date: Wed, 22 May 2013 19:32:49 -0300
+Subject: [PATCH] fixed test prefix.
+
+---
+ create_test | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/create_test b/create_test
+index 2e97122..883be59 100755
+--- a/create_test
++++ b/create_test
+@@ -8,8 +8,8 @@ def main(args):
+     templatefile = open( "template.txt", "r" )
+     output = re.sub(r'{WHAT}', args, templatefile.read())
+     templatefile.close()
+-    templatefile = open( "src/"+args+".cpp", "w" )
+-    print "creating ", "src/"+args+".cpp"
++    templatefile = open( "src/test_"+args+".cpp", "w" )
++    print "creating ", "src/test_"+args+".cpp"
+     templatefile.write( output )
+     templatefile.close()
+ 
+-- 
+1.7.11.1
+
+From c603b83b483bb5c837e9932585e69005bd5ac878 Mon Sep 17 00:00:00 2001
+From: Bruno Dias <contact@diasbruno.com.br>
+Date: Wed, 22 May 2013 19:35:36 -0300
+Subject: [PATCH] moved project scripts.
+
+---
+ oft/linux.rb      |  95 ++++++++++++++++++++++++
+ oft/linux64.rb    |  95 ++++++++++++++++++++++++
+ oft/osx.rb        |  69 ++++++++++++++++++
+ oft/run.rb        |  21 ++++++
+ oft/utils.rb      | 214 ++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ oftest/linux64.rb |  95 ------------------------
+ oftest/osx.rb     |  69 ------------------
+ oftest/run.rb     |  17 -----
+ oftest/utils.rb   | 205 ---------------------------------------------------
+ 9 files changed, 494 insertions(+), 386 deletions(-)
+ create mode 100644 oft/linux.rb
+ create mode 100644 oft/linux64.rb
+ create mode 100644 oft/osx.rb
+ create mode 100644 oft/run.rb
+ create mode 100644 oft/utils.rb
+ delete mode 100644 oftest/linux64.rb
+ delete mode 100644 oftest/osx.rb
+ delete mode 100644 oftest/run.rb
+ delete mode 100644 oftest/utils.rb
+
+diff --git a/oft/linux.rb b/oft/linux.rb
+new file mode 100644
+index 0000000..bec1278
+--- /dev/null
++++ b/oft/linux.rb
+@@ -0,0 +1,95 @@
++require 'colorator'
++require './oft/utils'
++
++namespace :linux do
++
++    # Before
++    #
++    task :before do
++        puts "Copying libs...".cyan
++        system "cp -r ../export/#{OS}/libs/* #{OFTEST_LIBS}"
++    end
++
++    # Set up all compiler stuff
++    #
++    task :setup do
++        CXX = "g++"
++        OTHER_FLAGS = "-march=native -mtune=native -Wall -fexceptions -pthread"
++        
++        # System check
++        #
++        GTK       = check_pkg_config( "gtk+-2.0" )
++        MPG123    = check_pkg_config( "libmpg123" )
++        LINUX_ARM = false
++
++        if check_pkg_config( "gstreamer-1.0" )
++            GST_VERSION = "1.0"
++        else
++            GST_VERSION = "0.10"
++        end
++
++        # Dependencies
++        #
++        libs = "cairo zlib gstreamer-#{GST_VERSION} gstreamer-app-#{GST_VERSION} gstreamer-video-#{GST_VERSION} gstreamer-base-#{GST_VERSION} libudev freetype2 sndfile openal portaudio-2.0 openssl"
++
++        if not LINUX_ARM
++            libs = "#{libs} gl glu glew"
++        end
++
++        # conditionally add GTK
++        if GTK
++            libs = "#{libs} gtk+-2.0"
++        end
++
++        # conditionally add mpg123
++        if MPG123
++            libs = "#{libs} libmpg123"
++        end
++
++        # Define CFLAGS
++        #
++        if GTK
++            cflags = "#{cflags} -DOF_USING_GTK"
++        end
++
++        if MPG123
++            cflags = "#{cflags} -DOF_USING_MPG123"
++        end
++
++        pkg_libs = %x[ pkg-config #{libs} --cflags ].strip
++        
++        cflags = "#{cflags} #{pkg_libs}"
++        THIRDPARTY_HEADERS_MORE = find_tps_expand_path( THIRDPARTY_HEADERS, "-I " )
++        cflags = "#{cflags} #{make_search_path_from_list( THIRDPARTY_HEADERS_MORE, "-I " )}"
++        cflags = "#{cflags} #{make_search_path_from_list( OF_HEADERS, "-I" )}"
++        CFLAGS = cflags
++
++        # Define LDFLAGS
++        #
++        ldflags = "-march=native -mtune=native"
++        ldflags = "#{ldflags} -Wl,-rpath=./libs"
++         
++        pkg_libs = %x[ pkg-config #{libs} --libs ].strip
++        
++        ldflags = "#{ldflags} #{pkg_libs} -lfreeimage -lfmodex -lFLAC -logg -lglut -lvorbis -ljack"
++        ldflags = "#{ldflags} -L../libs/openFrameworksCompiled/lib/#{OS} -lopenFrameworksDebug"
++        ldflags = "#{ldflags} -L ./libs/cpptest/lib/#{OS} -lcpptest"
++        ldflags = "#{ldflags} #{make_search_path_from_list( THIRDPARTY_LIBS_PATH, "-L " )}"
++        
++        # we need to exlude poco 
++        filtered_libs = exclude( THIRDPARTY_LIBS, /poco|.\.so/ )
++        
++        ldflags = "#{ldflags} #{filtered_libs.join(" ")}"
++        ldflags = "#{ldflags} -lPocoCrypto -lPocoNetSSL -lPocoNet -lPocoXML -lPocoFoundation -lPocoUtil"
++
++        LDFLAGS = "#{ldflags}"
++    end
++
++
++    # Debug target
++    #
++    task :debug do
++        puts "Linux debug...".cyan        
++    end
++
++end
+diff --git a/oft/linux64.rb b/oft/linux64.rb
+new file mode 100644
+index 0000000..7d40881
+--- /dev/null
++++ b/oft/linux64.rb
+@@ -0,0 +1,95 @@
++require 'colorator'
++require './oft/utils'
++
++namespace :linux64 do
++
++    # Before
++    #
++    task :before do
++        puts "Copying libs...".cyan
++        system "cp -r ../export/#{OS}/libs/* #{OFTEST_LIBS}"
++    end
++
++    # Set up all compiler stuff
++    #
++    task :setup do
++        CXX = "g++"
++        OTHER_FLAGS = "-march=native -mtune=native -Wall -fexceptions -pthread"
++        
++        # System check
++        #
++        GTK       = check_pkg_config( "gtk+-2.0" )
++        MPG123    = check_pkg_config( "libmpg123" )
++        LINUX_ARM = false
++
++        if check_pkg_config( "gstreamer-1.0" )
++            GST_VERSION = "1.0"
++        else
++            GST_VERSION = "0.10"
++        end
++
++        # Dependencies
++        #
++        libs = "cairo zlib gstreamer-#{GST_VERSION} gstreamer-app-#{GST_VERSION} gstreamer-video-#{GST_VERSION} gstreamer-base-#{GST_VERSION} libudev freetype2 sndfile openal portaudio-2.0 openssl"
++
++        if not LINUX_ARM
++            libs = "#{libs} gl glu glew"
++        end
++
++        # conditionally add GTK
++        if GTK
++            libs = "#{libs} gtk+-2.0"
++        end
++
++        # conditionally add mpg123
++        if MPG123
++            libs = "#{libs} libmpg123"
++        end
++
++        # Define CFLAGS
++        #
++        if GTK
++            cflags = "#{cflags} -DOF_USING_GTK"
++        end
++
++        if MPG123
++            cflags = "#{cflags} -DOF_USING_MPG123"
++        end
++
++        pkg_libs = %x[ pkg-config #{libs} --cflags ].strip
++        
++        cflags = "#{cflags} #{pkg_libs}"
++        THIRDPARTY_HEADERS_MORE = find_tps_expand_path( THIRDPARTY_HEADERS, "-I " )
++        cflags = "#{cflags} #{make_search_path_from_list( THIRDPARTY_HEADERS_MORE, "-I " )}"
++        cflags = "#{cflags} #{make_search_path_from_list( OF_HEADERS, "-I" )}"
++        CFLAGS = cflags
++
++        # Define LDFLAGS
++        #
++        ldflags = "-march=native -mtune=native"
++        ldflags = "#{ldflags} -Wl,-rpath=./libs"
++         
++        pkg_libs = %x[ pkg-config #{libs} --libs ].strip
++        
++        ldflags = "#{ldflags} #{pkg_libs} -lfreeimage -lfmodex -lFLAC -logg -lglut -lvorbis -ljack"
++        ldflags = "#{ldflags} -L../libs/openFrameworksCompiled/lib/#{OS} -lopenFrameworksDebug"
++        ldflags = "#{ldflags} -L ./libs/cpptest/lib/#{OS} -lcpptest"
++        ldflags = "#{ldflags} #{make_search_path_from_list( THIRDPARTY_LIBS_PATH, "-L " )}"
++        
++        # we need to exlude poco 
++        filtered_libs = exclude( THIRDPARTY_LIBS, /poco|.\.so/ )
++        
++        ldflags = "#{ldflags} #{filtered_libs.join(" ")}"
++        ldflags = "#{ldflags} -lPocoCrypto -lPocoNetSSL -lPocoNet -lPocoXML -lPocoFoundation -lPocoUtil"
++
++        LDFLAGS = "#{ldflags}"
++    end
++
++
++    # Debug target
++    #
++    task :debug do
++        puts "Linux debug...".cyan        
++    end
++
++end
+diff --git a/oft/osx.rb b/oft/osx.rb
+new file mode 100644
+index 0000000..46a1997
+--- /dev/null
++++ b/oft/osx.rb
+@@ -0,0 +1,69 @@
++require 'colorator'
++require './oft/utils'
++
++namespace :osx do
++
++    # Before
++    #
++    task :before do
++        puts "Copying libs...".cyan
++        system "cp #{OF_LIBS_PATH}/fmodex/lib/#{OS}/* #{OFTEST_BIN}"
++        system "cp -r #{OF_LIBS_PATH}/glut/lib/osx/GLUT.framework #{OFTEST_FRAMEWORKS}/GLUT.framework"
++    end
++
++    # Set up all compiler stuff
++    #
++    task :setup do
++
++        CXX="g++"
++
++        # Define CFLAGS
++        #
++        OTHER_FLAGS = "-m32 -arch i386 -Wall -ansi -D__MACOSX_CORE__ -mtune=native -fexceptions"
++
++        cflags = "#{cflags} #{make_search_path_from_list( OF_HEADERS, "-I" )}"
++
++        # Cairo needs to be expanded.
++        thirdparty_headers_and_cairo = []
++        thirdparty_headers_and_cairo.push "#{OF_LIBS_PATH}/cairo/include/cairo #{OF_LIBS_PATH}/glut/include"
++        THIRDPARTY_HEADERS.each do | c |
++            thirdparty_headers_and_cairo.push c
++        end
++
++        cflags = "#{cflags} #{make_search_path_from_list( exclude( thirdparty_headers_and_cairo, /quicktime/ ), "-I" )}"
++        cflags = "#{cflags}"
++        CFLAGS = cflags
++
++        # Define LDFLAGS
++        #
++
++        # Frameworks
++        #
++        frameworks="-F/Users/brunodias/openFrameworks/libs/glut/lib/osx"
++        frameworks="#{frameworks} -framework GLUT -framework Cocoa -framework ApplicationServices"
++        frameworks="#{frameworks} -framework CoreFoundation -framework CoreVideo -framework CoreServices"
++        frameworks="#{frameworks} -framework AudioToolbox -framework AGL -framework Carbon"
++        frameworks="#{frameworks} -framework OpenGL -framework QuickTime -framework QTKit"
++        frameworks="#{frameworks} -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks"
++        
++        ldflags = "#{ldflags} #{frameworks}"
++
++        ldflags = "#{ldflags} -L../libs/openFrameworksCompiled/lib/#{OS} -lopenFrameworksDebug"
++        ldflags = "#{ldflags} -L./libs/cpptest/lib/#{OS} -lcpptest"
++        
++        # we need to exlude poco 
++        filtered_libs = exclude( THIRDPARTY_LIBS, /GLUT\.|\.so/ )
++        
++        ldflags = "#{ldflags} #{filtered_libs.join(" ")}"
++
++        LDFLAGS = "#{ldflags}"
++    end
++
++
++    # Debug target
++    #
++    task :debug do
++        puts "Mac osx debug...".cyan        
++    end
++
++end
+diff --git a/oft/run.rb b/oft/run.rb
+new file mode 100644
+index 0000000..5e7d201
+--- /dev/null
++++ b/oft/run.rb
+@@ -0,0 +1,21 @@
++require 'colorator'
++require './oft/utils'
++
++# Run all defined tests.
++#
++task :run_tests, [ :targets ] do | t, targets |
++    puts "\nRunning tests\n".cyan
++    
++    puts "Testing...".cyan
++    exit_with_error = false
++    
++    Dir.chdir( OFTEST_BIN ) do
++        targets.each do | t |
++            print "-- #{t}"
++            error = system "./#{t}"
++            exit_with_error = exit_with_error | error
++        end
++    end
++
++    fail "1" unless !exit_with_error
++end
+diff --git a/oft/utils.rb b/oft/utils.rb
+new file mode 100644
+index 0000000..25e4c1c
+--- /dev/null
++++ b/oft/utils.rb
+@@ -0,0 +1,214 @@
++require 'colorator'
++
++#
++# FIXME: update comments.
++#
++
++# "Gambiarra!"
++class String
++    def to_bool
++        return true if self == true || self =~ (/(true|t|yes|y|1)$/i)
++        return false if self == false || self.blank? || self =~ (/(false|f|no|n|0)$/i)
++        raise ArgumentError.new("invalid value for Boolean: \"#{self}\"")
++    end
++end
++
++# Exclude a item form a list with regex.
++# FIXME: update name to exclude_from_list.
++#
++def exclude( ls, exclude )
++    filtered = []
++    ls.each do | l |
++        if not exclude.match( l )
++            filtered.push l
++        end
++    end
++    return filtered
++end
++
++# Get all tests from 'src'.
++#
++# return Array
++def get_all_tests()
++    targets = []
++    FileList[ "src/test_*\.cpp"].each do | t |
++        targets.push t.gsub("src/test_", "").gsub(/\.\w+/,"")
++    end
++    return targets
++end
++
++# List targets
++#
++# ts => list of targets
++#
++# return void
++def list_targets( ts )
++    puts "Testing...".red
++    ts.each do | t |
++        puts "-- " + t.red
++    end
++end
++
++# Generate outputs for a target
++#
++# t => target
++#
++# return Array
++def generate_output_for_file( t )
++    outputs = []
++    outputs.push "#{make_file_ext( t, ".d" )}"
++    outputs.push "#{make_file_ext( t, ".o" )}"
++    outputs.push "#{make_file_ext( t, ""   )}"
++    return outputs
++end
++
++# Get all tests from 'src'.
++#
++# name => the test name.
++# ext  => extension to be added.
++# 
++# return String
++def make_file_ext( name, ext )
++    return "#{name}#{ext}"
++end
++
++# Tool to find headers
++#
++def find_headers( at, exclude )
++    headers =  []
++    FileList[ at ].exclude( exclude ).each do | p |
++        headers.push p
++    end
++    return headers
++end
++
++# Tool to find headers
++#
++def find_tps_path( at )
++    paths =  []
++    FileList[ "#{at}/**" ].exclude( /openFrameworks/ ).each do | p |
++        paths.push p
++    end
++    return paths
++end
++
++# Find all openFrameworks paths.
++#
++def find_of_headers_path( path )
++    headers = []
++    headers.push path
++    find_headers( "#{path}/**", /.+\.h/ ).each do | h |
++        headers.push h
++    end
++    return headers
++end
++
++# Find all third party headers.
++#
++def find_tps_headers_path( path, dont_expand = "" )
++    includes_path = find_headers( "#{path}/**/include", /openFrameworks/ )
++    return includes_path
++end
++
++# Find all third party headers.
++#
++def find_tps_expand_path( tps, dont_expand = "" )
++    tps_headers = []
++    tps.each do | tp |
++        tps_headers.push tp
++        found = find_headers("#{tp}/**", /.+\.[A-Za-z]+/ )
++        found.each do | f |
++            tps_headers.push f
++        end
++    end
++    return tps_headers
++end
++
++# Find all third party headers.
++#
++def find_tps_libs_path( tps, os )
++    libs = []
++    tps.each do | tp |
++        libs.push "#{tp}/lib/#{os}"
++    end
++    return libs
++end
++
++# Make -c for compiler options.
++#
++def find_libs( at, os )
++    libs =  []
++    FileList[ "#{at}/lib/#{os}/*" ].each do | l |
++        libs.push l
++    end
++    return libs
++end
++
++# Make -c for compiler options.
++#
++def find_tps_libs( tps, os, exclude = "" )
++    libs = []
++    tps.each do | tp |
++        found = find_libs( tp, os )
++        
++        found.each do | f |
++            if not exclude.match( f )
++                libs.push  f
++            end
++        end
++    end
++    return libs
++end
++
++# Takes a list and and add a cxx option identifier -F, -I or -L.
++#
++def make_search_path_from_list( ls, option )
++    headers = ""
++    ls.each do | p |
++        headers="#{headers} #{option}#{p}"
++    end
++    return headers
++end
++
++# Make -MMD... for compiler options.
++#
++def make_compiler_output( path, os )
++    return "-MMD -MP -MF #{path}/#{os[0]} -MT #{path}/#{os[1]} -o #{path}/#{os[1]}"
++end
++
++# Make -c for compiler options.
++#
++def make_compiler_source( path, os )
++    return "-c #{path}/#{OFTEST_PREFIX}#{make_file_ext(os[2],".cpp")}"
++end
++
++# Make -c for compiler options.
++#
++def make_linker_obj( path, os )
++    return "#{ path }/#{ os[ 1 ] }"
++end
++
++# Make -c for compiler options.
++#
++def make_linker_output( path, os )
++    return "-o #{path}/#{os[2]}"
++end
++
++# (linux) Check if a dependency is missing with pkg-config.
++#
++# what => package name
++# return Bool
++#
++def check_pkg_config( what )
++    return system "pkg-config #{what} --exists"
++end
++
++def compile_with( log, target, compiler_str )
++    print "#{log} #{target}..."
++    if system compiler_str
++        puts "[Ok]".green
++    else
++        puts "[Fail]".red
++    end
++end
++
+diff --git a/oftest/linux64.rb b/oftest/linux64.rb
+deleted file mode 100644
+index d948892..0000000
+--- a/oftest/linux64.rb
++++ /dev/null
+@@ -1,95 +0,0 @@
+-require 'colorator'
+-require './oftest/utils'
+-
+-namespace :linux64 do
+-
+-    # Before
+-    #
+-    task :before do
+-        puts "Copying libs...".cyan
+-        system "cp -r ../export/#{OS}/libs/* #{OFTEST_LIBS}"
+-    end
+-
+-    # Set up all compiler stuff
+-    #
+-    task :setup do
+-        CXX = "g++"
+-        OTHER_FLAGS = "-march=native -mtune=native -Wall -fexceptions -pthread"
+-        
+-        # System check
+-        #
+-        GTK       = check_pkg_config( "gtk+-2.0" )
+-        MPG123    = check_pkg_config( "libmpg123" )
+-        LINUX_ARM = false
+-
+-        if check_pkg_config( "gstreamer-1.0" )
+-            GST_VERSION = "1.0"
+-        else
+-            GST_VERSION = "0.10"
+-        end
+-
+-        # Dependencies
+-        #
+-        libs = "cairo zlib gstreamer-#{GST_VERSION} gstreamer-app-#{GST_VERSION} gstreamer-video-#{GST_VERSION} gstreamer-base-#{GST_VERSION} libudev freetype2 sndfile openal portaudio-2.0 openssl"
+-
+-        if not LINUX_ARM
+-            libs = "#{libs} gl glu glew"
+-        end
+-
+-        # conditionally add GTK
+-        if GTK
+-            libs = "#{libs} gtk+-2.0"
+-        end
+-
+-        # conditionally add mpg123
+-        if MPG123
+-            libs = "#{libs} libmpg123"
+-        end
+-
+-        # Define CFLAGS
+-        #
+-        if GTK
+-            cflags = "#{cflags} -DOF_USING_GTK"
+-        end
+-
+-        if MPG123
+-            cflags = "#{cflags} -DOF_USING_MPG123"
+-        end
+-
+-        pkg_libs = %x[ pkg-config #{libs} --cflags ].strip
+-        
+-        cflags = "#{cflags} #{pkg_libs}"
+-        THIRDPARTY_HEADERS_MORE = find_tps_expand_path( THIRDPARTY_HEADERS, "-I " )
+-        cflags = "#{cflags} #{make_search_path_from_list( THIRDPARTY_HEADERS_MORE, "-I " )}"
+-        cflags = "#{cflags} #{make_search_path_from_list( OF_HEADERS, "-I" )}"
+-        CFLAGS = cflags
+-
+-        # Define LDFLAGS
+-        #
+-        ldflags = "-march=native -mtune=native"
+-        ldflags = "#{ldflags} -Wl,-rpath=./libs"
+-         
+-        pkg_libs = %x[ pkg-config #{libs} --libs ].strip
+-        
+-        ldflags = "#{ldflags} #{pkg_libs} -lfreeimage -lfmodex -lFLAC -logg -lglut -lvorbis -ljack"
+-        ldflags = "#{ldflags} -L../libs/openFrameworksCompiled/lib/#{OS} -lopenFrameworksDebug"
+-        ldflags = "#{ldflags} -L ./libs/cpptest/lib/#{OS} -lcpptest"
+-        ldflags = "#{ldflags} #{make_search_path_from_list( THIRDPARTY_LIBS_PATH, "-L " )}"
+-        
+-        # we need to exlude poco 
+-        filtered_libs = exclude( THIRDPARTY_LIBS, /poco|.\.so/ )
+-        
+-        ldflags = "#{ldflags} #{filtered_libs.join(" ")}"
+-        ldflags = "#{ldflags} -lPocoCrypto -lPocoNetSSL -lPocoNet -lPocoXML -lPocoFoundation -lPocoUtil"
+-
+-        LDFLAGS = "#{ldflags}"
+-    end
+-
+-
+-    # Debug target
+-    #
+-    task :debug do
+-        puts "Linux debug...".cyan        
+-    end
+-
+-end
+diff --git a/oftest/osx.rb b/oftest/osx.rb
+deleted file mode 100644
+index 20cc680..0000000
+--- a/oftest/osx.rb
++++ /dev/null
+@@ -1,69 +0,0 @@
+-require 'colorator'
+-require './oftest/utils'
+-
+-namespace :osx do
+-
+-    # Before
+-    #
+-    task :before do
+-        puts "Copying libs...".cyan
+-        system "cp #{OF_LIBS_PATH}/fmodex/lib/#{OS}/* #{OFTEST_BIN}"
+-        system "cp -r #{OF_LIBS_PATH}/glut/lib/osx/GLUT.framework #{OFTEST_FRAMEWORKS}/GLUT.framework"
+-    end
+-
+-    # Set up all compiler stuff
+-    #
+-    task :setup do
+-
+-        CXX="g++"
+-
+-        # Define CFLAGS
+-        #
+-        OTHER_FLAGS = "-m32 -arch i386 -Wall -ansi -D__MACOSX_CORE__ -mtune=native -fexceptions"
+-
+-        cflags = "#{cflags} #{make_search_path_from_list( OF_HEADERS, "-I" )}"
+-
+-        # Cairo needs to be expanded.
+-        thirdparty_headers_and_cairo = []
+-        thirdparty_headers_and_cairo.push "#{OF_LIBS_PATH}/cairo/include/cairo #{OF_LIBS_PATH}/glut/include"
+-        THIRDPARTY_HEADERS.each do | c |
+-            thirdparty_headers_and_cairo.push c
+-        end
+-
+-        cflags = "#{cflags} #{make_search_path_from_list( exclude( thirdparty_headers_and_cairo, /quicktime/ ), "-I" )}"
+-        cflags = "#{cflags}"
+-        CFLAGS = cflags
+-
+-        # Define LDFLAGS
+-        #
+-
+-        # Frameworks
+-        #
+-        frameworks="-F/Users/brunodias/openFrameworks/libs/glut/lib/osx"
+-        frameworks="#{frameworks} -framework GLUT -framework Cocoa -framework ApplicationServices"
+-        frameworks="#{frameworks} -framework CoreFoundation -framework CoreVideo -framework CoreServices"
+-        frameworks="#{frameworks} -framework AudioToolbox -framework AGL -framework Carbon"
+-        frameworks="#{frameworks} -framework OpenGL -framework QuickTime -framework QTKit"
+-        frameworks="#{frameworks} -F/Developer/SDKs/MacOSX10.6.sdk/System/Library/Frameworks"
+-        
+-        ldflags = "#{ldflags} #{frameworks}"
+-
+-        ldflags = "#{ldflags} -L../libs/openFrameworksCompiled/lib/#{OS} -lopenFrameworksDebug"
+-        ldflags = "#{ldflags} -L./libs/cpptest/lib/#{OS} -lcpptest"
+-        
+-        # we need to exlude poco 
+-        filtered_libs = exclude( THIRDPARTY_LIBS, /GLUT\.|\.so/ )
+-        
+-        ldflags = "#{ldflags} #{filtered_libs.join(" ")}"
+-
+-        LDFLAGS = "#{ldflags}"
+-    end
+-
+-
+-    # Debug target
+-    #
+-    task :debug do
+-        puts "Mac osx debug...".cyan        
+-    end
+-
+-end
+diff --git a/oftest/run.rb b/oftest/run.rb
+deleted file mode 100644
+index 2328b92..0000000
+--- a/oftest/run.rb
++++ /dev/null
+@@ -1,17 +0,0 @@
+-require 'colorator'
+-require './oftest/utils'
+-
+-# Run all defined tests.
+-#
+-task :run_tests, [ :targets ] do | t, targets |
+-    puts "\nRunning tests\n".cyan
+-    
+-    puts "Testing...".cyan
+-    
+-    Dir.chdir( OFTEST_BIN ) do
+-        targets.each do | t |
+-            print "-- #{t}"
+-            log = system "./#{t}"
+-        end
+-    end
+-end
+diff --git a/oftest/utils.rb b/oftest/utils.rb
+deleted file mode 100644
+index 76099da..0000000
+--- a/oftest/utils.rb
++++ /dev/null
+@@ -1,205 +0,0 @@
+-require 'colorator'
+-
+-#
+-# FIXME: update comments.
+-#
+-
+-# Exclude a item form a list with regex.
+-# FIXME: update name to exclude_from_list.
+-#
+-def exclude( ls, exclude )
+-    filtered = []
+-    ls.each do | l |
+-        if not exclude.match( l )
+-            filtered.push l
+-        end
+-    end
+-    return filtered
+-end
+-
+-# Get all tests from 'src'.
+-#
+-# return Array
+-def get_all_tests()
+-    targets = []
+-    FileList[ "src/test_*\.cpp"].each do | t |
+-        targets.push t.gsub("src/test_", "").gsub(/\.\w+/,"")
+-    end
+-    return targets
+-end
+-
+-# List targets
+-#
+-# ts => list of targets
+-#
+-# return void
+-def list_targets( ts )
+-    puts "Testing...".red
+-    ts.each do | t |
+-        puts "-- " + t.red
+-    end
+-end
+-
+-# Generate outputs for a target
+-#
+-# t => target
+-#
+-# return Array
+-def generate_output_for_file( t )
+-    outputs = []
+-    outputs.push "#{make_file_ext( t, ".d" )}"
+-    outputs.push "#{make_file_ext( t, ".o" )}"
+-    outputs.push "#{make_file_ext( t, ""   )}"
+-    return outputs
+-end
+-
+-# Get all tests from 'src'.
+-#
+-# name => the test name.
+-# ext  => extension to be added.
+-# 
+-# return String
+-def make_file_ext( name, ext )
+-    return "#{name}#{ext}"
+-end
+-
+-# Tool to find headers
+-#
+-def find_headers( at, exclude )
+-    headers =  []
+-    FileList[ at ].exclude( exclude ).each do | p |
+-        headers.push p
+-    end
+-    return headers
+-end
+-
+-# Tool to find headers
+-#
+-def find_tps_path( at )
+-    paths =  []
+-    FileList[ "#{at}/**" ].exclude( /openFrameworks/ ).each do | p |
+-        paths.push p
+-    end
+-    return paths
+-end
+-
+-# Find all openFrameworks paths.
+-#
+-def find_of_headers_path( path )
+-    headers = []
+-    headers.push path
+-    find_headers( "#{path}/**", /.+\.h/ ).each do | h |
+-        headers.push h
+-    end
+-    return headers
+-end
+-
+-# Find all third party headers.
+-#
+-def find_tps_headers_path( path, dont_expand = "" )
+-    includes_path = find_headers( "#{path}/**/include", /openFrameworks/ )
+-    return includes_path
+-end
+-
+-# Find all third party headers.
+-#
+-def find_tps_expand_path( tps, dont_expand = "" )
+-    tps_headers = []
+-    tps.each do | tp |
+-        tps_headers.push tp
+-        found = find_headers("#{tp}/**", /.+\.[A-Za-z]+/ )
+-        found.each do | f |
+-            tps_headers.push f
+-        end
+-    end
+-    return tps_headers
+-end
+-
+-# Find all third party headers.
+-#
+-def find_tps_libs_path( tps, os )
+-    libs = []
+-    tps.each do | tp |
+-        libs.push "#{tp}/lib/#{os}"
+-    end
+-    return libs
+-end
+-
+-# Make -c for compiler options.
+-#
+-def find_libs( at, os )
+-    libs =  []
+-    FileList[ "#{at}/lib/#{os}/*" ].each do | l |
+-        libs.push l
+-    end
+-    return libs
+-end
+-
+-# Make -c for compiler options.
+-#
+-def find_tps_libs( tps, os, exclude = "" )
+-    libs = []
+-    tps.each do | tp |
+-        found = find_libs( tp, os )
+-        
+-        found.each do | f |
+-            if not exclude.match( f )
+-                libs.push  f
+-            end
+-        end
+-    end
+-    return libs
+-end
+-
+-# Takes a list and and add a cxx option identifier -F, -I or -L.
+-#
+-def make_search_path_from_list( ls, option )
+-    headers = ""
+-    ls.each do | p |
+-        headers="#{headers} #{option}#{p}"
+-    end
+-    return headers
+-end
+-
+-# Make -MMD... for compiler options.
+-#
+-def make_compiler_output( path, os )
+-    return "-MMD -MP -MF #{path}/#{os[0]} -MT #{path}/#{os[1]} -o #{path}/#{os[1]}"
+-end
+-
+-# Make -c for compiler options.
+-#
+-def make_compiler_source( path, os )
+-    return "-c #{path}/#{OFTEST_PREFIX}#{make_file_ext(os[2],".cpp")}"
+-end
+-
+-# Make -c for compiler options.
+-#
+-def make_linker_obj( path, os )
+-    return "#{ path }/#{ os[ 1 ] }"
+-end
+-
+-# Make -c for compiler options.
+-#
+-def make_linker_output( path, os )
+-    return "-o #{path}/#{os[2]}"
+-end
+-
+-# (linux) Check if a dependency is missing with pkg-config.
+-#
+-# what => package name
+-# return Bool
+-#
+-def check_pkg_config( what )
+-    return system "pkg-config #{what} --exists"
+-end
+-
+-def compile_with( log, target, compiler_str )
+-    print "#{log} #{target}..."
+-    if system compiler_str
+-        puts "[Ok]".green
+-    else
+-        puts "[Fail]".red
+-    end
+-end
+-
+-- 
+1.7.11.1
+
+From 29bae8bdcda5eb2a245dc825142f9860116fcf5b Mon Sep 17 00:00:00 2001
+From: Bruno Dias <contact@diasbruno.com.br>
+Date: Wed, 22 May 2013 19:36:02 -0300
+Subject: [PATCH] update referencies.
+
+---
+ rakefile | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/rakefile b/rakefile
+index 35c3a88..a2ed201 100644
+--- a/rakefile
++++ b/rakefile
+@@ -3,11 +3,11 @@ require 'rubygems'
+ require 'bundler/setup'
+ require 'colorator'
+ 
+-require './oftest/osx'
+-require './oftest/linux'
+-require './oftest/linux64'
+-require './oftest/utils'
+-require './oftest/run'
++require './oft/osx'
++require './oft/linux'
++require './oft/linux64'
++require './oft/utils'
++require './oft/run'
+ 
+ #############################################################
+ #
+-- 
+1.7.11.1
+
+From c92933b2f9a8df456f0bd39ec409f69ea1fef3a3 Mon Sep 17 00:00:00 2001
+From: Bruno Dias <contact@diasbruno.com.br>
+Date: Wed, 22 May 2013 19:37:17 -0300
+Subject: [PATCH] fixed tasks.
+
+---
+ rakefile | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/rakefile b/rakefile
+index a2ed201..0f7fca0 100644
+--- a/rakefile
++++ b/rakefile
+@@ -59,9 +59,10 @@ require './oft/run'
+ 
+ # Default: Run all tests
+ #
+-task :default => [ :test ]
++task :default => [ :test 
++                 ]
+ task :clean   => [ :setup,
+-                   :clean_all, 
++                   :clean_all
+                  ]
+ task :debug   => [ :setup, 
+                    :debug_all
+@@ -193,8 +194,8 @@ task :before  do
+     system "mkdir -p #{OFTEST_LOG}"
+     
+     # First we compile.
+-    Rake::Task[ :compile_tests ].execute()
+     Rake::Task[ "#{OS}:before" ].execute( TARGETS  )
++    Rake::Task[ :compile_tests ].execute()
+     Rake::Task[ :after ].execute()
+ end
+ 
+-- 
+1.7.11.1
+
+From e361acbe407d684d3cc6e1561976807cdff3074c Mon Sep 17 00:00:00 2001
+From: Bruno Dias <contact@diasbruno.com.br>
+Date: Wed, 22 May 2013 19:38:07 -0300
+Subject: [PATCH] make a test fail to invalidate the next build.
+
+---
+ src/test_ofColor.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/test_ofColor.cpp b/src/test_ofColor.cpp
+index a30f271..202e79a 100644
+--- a/src/test_ofColor.cpp
++++ b/src/test_ofColor.cpp
+@@ -33,7 +33,7 @@ private:
+     
+     void
+     test_getters() {
+-		TEST_ASSERT( color.getHex() == 16777215 )
++		TEST_ASSERT( color.getHex() == 1677721/*5*/ )
+ 		TEST_ASSERT( color.getInverted().getHex() == 0 )
+         
+         color.r = -1.0;
+-- 
+1.7.11.1
+

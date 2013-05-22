@@ -8,8 +8,8 @@ def main(args):
     templatefile = open( "template.txt", "r" )
     output = re.sub(r'{WHAT}', args, templatefile.read())
     templatefile.close()
-    templatefile = open( "src/"+args+".cpp", "w" )
-    print "creating ", "src/"+args+".cpp"
+    templatefile = open( "src/test_"+args+".cpp", "w" )
+    print "creating ", "src/test_"+args+".cpp"
     templatefile.write( output )
     templatefile.close()
 

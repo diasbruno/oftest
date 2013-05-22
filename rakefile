@@ -3,11 +3,11 @@ require 'rubygems'
 require 'bundler/setup'
 require 'colorator'
 
-require './oftest/osx'
-require './oftest/linux'
-require './oftest/linux64'
-require './oftest/utils'
-require './oftest/run'
+require './oft/osx'
+require './oft/linux'
+require './oft/linux64'
+require './oft/utils'
+require './oft/run'
 
 #############################################################
 #
@@ -59,9 +59,10 @@ require './oftest/run'
 
 # Default: Run all tests
 #
-task :default => [ :test ]
+task :default => [ :test 
+                 ]
 task :clean   => [ :setup,
-                   :clean_all, 
+                   :clean_all
                  ]
 task :debug   => [ :setup, 
                    :debug_all
@@ -193,8 +194,8 @@ task :before  do
     system "mkdir -p #{OFTEST_LOG}"
     
     # First we compile.
-    Rake::Task[ :compile_tests ].execute()
     Rake::Task[ "#{OS}:before" ].execute( TARGETS  )
+    Rake::Task[ :compile_tests ].execute()
     Rake::Task[ :after ].execute()
 end
 
