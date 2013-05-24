@@ -55,7 +55,6 @@ OF_PROJECT_LIBS += ./libs/cpptest/lib/osx/libcpptest.a
 $(TESTS): 
 	@echo Building all tests...$@
 	$(CXX) -c  $(CFLAGS) -MMD -MP -MF build/$@.d -MT build/$@.o -o build/$@.o -c src/test_$@.cpp > logs/$@.compiler.log
-ifeq "$(PLATFORM_LIB_SUBPATH)" "osx"
 	$(CXX) -o bin/$@ build/$@.o $(OF_PROJECT_ADDONS_OBJS) $(LDFLAGS) ../libs/openFrameworksCompiled/lib/$(PLATFORM_LIB_SUBPATH)/libopenFrameworksDebug.a $(TARGET_LIBS) $(OF_PROJECT_LIBS) $(OF_CORE_LIBS) &> logs/$@.linker.log
 
 create_paths:
