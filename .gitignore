@@ -1,6 +1,5 @@
 bin/**
-frameworks/**
+build/**
 logs/**
-results/**
 *.o
 *.d
