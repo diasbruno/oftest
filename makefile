@@ -67,8 +67,10 @@ copy_libs_and_frameworks:
 	@cp -rf ../libs/glut/lib/osx/GLUT.framework ./bin/frameworks/GLUT.framework
         
 #   Now, let's change some stuff.
+ifeq "$(PLATFORM_LIB_SUBPATH)" "osx"
 	@$(INTX) -id @executable_path/libs/libfmodex.dylib ./bin/libs/libfmodex.dylib
 	@$(INTX) -change @executable_path/../Frameworks/GLUT.framework/Versions/A/GLUT @executable_path/frameworks/GLUT.framework/Versions/A/GLUT -id @executable_path/frameworks/GLUT.framework/Versions/A/GLUT ./bin/frameworks/GLUT.framework/GLUT
+endif
 
 tests: create_paths copy_libs_and_frameworks $(TESTS) 
 	@echo Compiling OF library for Tests
