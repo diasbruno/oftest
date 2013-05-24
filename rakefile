@@ -1,13 +1,15 @@
 # Headers
 require 'rubygems'
 require 'bundler/setup'
+
 require 'colorator'
 
-require './oft/osx'
-require './oft/linux'
-require './oft/linux64'
-require './oft/utils'
-require './oft/run'
+require './api/config'
+require './api/utils'
+require './api/tasks/linux'
+require './api/tasks/linux64'
+require './api/tasks/osx'
+require './api/run'
 
 #############################################################
 #
@@ -54,20 +56,19 @@ require './oft/run'
 #  - OFTEST_PREFIX
 #
 #  FIXME: there are some utils that can be refactored.
+#  FIXME: include optparse.
 #
 #############################################################
 
 # Default: Run all tests
 #
-task :default => [ :test 
-                 ]
+task :default => [ :test ]
 task :clean   => [ :setup,
-                   :clean_all
+                   :clean_all, 
                  ]
 task :debug   => [ :setup, 
                    :debug_all
                  ]
-
 
 # Help info. (yeah, must have...very important! :)
 #
@@ -90,75 +91,78 @@ task :test, [ :args ] => [ :setup ] do | t, args |
     args.with_defaults({:arg => "" })
     ts = args[ :args ].to_s.strip
 
-    if ts.eql? ""
-        TARGETS = get_all_tests()
-    else
-        TARGETS = ts.split(" ")
-    end
+    # parse tests from args
+    TARGETS = parse_tests( ts );
 
     # FIXME: glue all...
     Rake::Task[ :before ].execute()
+    # First we compile.
+    Rake::Task[ :compile_tests ].execute()
+    Rake::Task[ :after ].execute()
 end
 
 # Set up the environment
 # 
 task :setup do
     puts "Setting up the environment...".cyan
-    if not ENV['CXX'].eql? ""
-        CXX = ENV['CXX']
-    else
-        CXX ="g++"
-    end
-    if not ENV['CC'].eql? ""
-        CC  = ENV['CC']
-    else
-        CC  = "gcc"
-    end
-
     # System
+    #
     PLATFORM_NAME = %x[ uname ].sub( "\n", "" )
     PLATFORM_ARCH = %x[ uname -m ].sub( "\n", "" )
-
-    # define platform
-    if /[Ll]inux/.match( PLATFORM_NAME )
-        os = "linux"
-    end
-
-    if /Darwin/.match( PLATFORM_NAME )
-        os = "osx"
-    end
-
-    # check for x..64
-    if /x86_64/.match( PLATFORM_ARCH )
-        os="#{os}64"
-    end
-
-    OS = os
-    ARCH = PLATFORM_ARCH
-
+    
+    # Check ENV
+    # to change the compiler
+    # do it in the task. api/task/osx.rb
+    #
+    Of::Compiler.cxx = ENV["CXX"] if not ENV["CXX"].eql? ""
+    Of::Compiler.cc = ENV["CC"] if not ENV["CC"].eql? ""
+    
+    # Detect platfrom.
+    OS = Of::Compiler.detect_platform()
+    
     # save the absolute path
     # it will make it easier 
     # to move back
+    OF_ROOT = ".."
     OFTEST_ROOT  = "."
-    OF_ROOT  = ".."
-
+    
     # openFrameworks
-
+    #
     OF_LIBS_PATH = "#{OF_ROOT}/libs"
 
-    OF_HEADERS_PATH = "#{OF_LIBS_PATH}/openFrameworks"
-    OF_LIB_PATH = "#{OF_LIBS_PATH}/openFrameworksCompiled/#{OS}/lib"
+    # openFrameworks can be included directly
+    #
+    Of::Of.path = "openFrameworks"
+    Of::Of.path = "#{OF_LIBS_PATH}/openFrameworks"
+    Of::Of.path_include = "#{OF_LIBS_PATH}/openFrameworks"
+    Of::Of.path_lib = "#{OF_LIBS_PATH}/openFrameworksCompiled/lib/#{OS}"
 
-    OF_HEADERS = find_of_headers_path( OF_HEADERS_PATH )
-    THIRDPARTY_PATHS = find_tps_path( OF_LIBS_PATH )
+    # find_include_paths :: String -> [String]
+    #
+    Of::Of.headers = find_all_includes_paths( Of::Of.path_include, /\.\w+/ )
 
-    THIRDPARTY_HEADERS = find_tps_headers_path( OF_LIBS_PATH, "" )
-    THIRDPARTY_LIBS_PATH = find_tps_libs_path( THIRDPARTY_PATHS, OS )
-    
-    THIRDPARTY_LIBS = find_tps_libs( THIRDPARTY_PATHS, OS )
-
+    # finding third party libs
+    #
+    find_paths( OF_LIBS_PATH, /openFrameworks/ ).each do | t |
+        tp = Of::Library.new
+        tp.name         = t.sub( "#{OF_LIBS_PATH}/", "" )
+        tp.path         = t
+        # headers section
+        #
+        tp.path_include = "#{t}/include"
+        tp.headers      = find_all_includes_paths( tp.path_include, /\.\w+/ )
+        # libs set only if it exists
+        #
+        if File.directory?( "#{t}/lib/#{OS}" )
+            tp.path_lib     = "#{t}/lib/#{OS}"
+            tp.libs         = find_libs( t, OS )
+        end
+        # include the library in the list.
+        #
+        Of::Tp.libs.push tp
+    end
     # OF test
-
+    #
     OFTEST_SRC = "#{OFTEST_ROOT}/src"
     OFTEST_BIN = "#{OFTEST_ROOT}/bin"
     OFTEST_BUILD = "#{OFTEST_ROOT}/build"
@@ -169,21 +173,16 @@ task :setup do
     OFTEST_LOG = %x[ pwd ].strip + "/logs"
 
     OFTEST_PREFIX = "test_"
-
 end
 
 # Clean up
 #
 task :clean_all do
     puts "Clean up...".red
-
-    FileList[ "#{OFTEST_BUILD}/*\.[od]" ].each do | c |
-        file = c.gsub( "#{OFTEST_BUILD}/", "" )
-        puts "\[deleting\] #{file}"
-        system "rm -rf #{c}"
-    end
     
-    FileList[ "#{OFTEST_BIN}/*" ].each do | c |
+    # Delete everything in the bin folder.
+    #
+    FileList[ "#{OFTEST_BUILD}/*" ].each do | c |
         file = c.gsub( "#{OFTEST_BUILD}/", "" )
         puts "\[deleting\] #{file}"
         system "rm -rf #{c}"
@@ -203,10 +202,24 @@ task :before  do
 
     system "mkdir -p #{OFTEST_LOG}"
     
-    # First we compile.
+    if /linux/.match( OS )
+    
+        Dir.chdir( "../scripts/linux" ) do
+            compiled = system "sudo ./compileOF.sh >& #{OFTEST_LOG}/of.log"
+            print "Compiling OF...".cyan
+            if compiled
+                puts "[Ok]".green
+            else
+                puts "[Fail]".red
+            end
+        end
+    end
+
+    # FIXME: move to Test class.
+    CXX = Of::Compiler.cxx
+    CC = Of::Compiler.cc
+
     Rake::Task[ "#{OS}:before" ].execute( TARGETS  )
-    Rake::Task[ :compile_tests ].execute()
-    Rake::Task[ :after ].execute()
 end
 
 # Before everything
@@ -217,7 +230,6 @@ task :compile_tests  do
     TARGETS.each do | target |
         Rake::Task[ :compile ].execute( target )
     end
-
 end
 
 # After
@@ -239,6 +251,7 @@ linker_objs      = ""
 # Set up vars for each
 #
 task :before_compile, [ :target ] do | t, target |
+
     output           = generate_output_for_file( target )
     compiler_outputs = make_compiler_output( OFTEST_BUILD, output )
     compiler_source  = make_compiler_source( OFTEST_SRC, output )
@@ -251,11 +264,11 @@ end
 task :compile, [ :target ] do | t, target |
     Rake::Task[ :before_compile ].execute( target )
     puts
-    compiler = "#{CXX} #{OTHER_FLAGS} #{CFLAGS} #{} -I ./libs/cpptest/lib/include  #{compiler_outputs} #{compiler_source} 2> #{OFTEST_LOG}/#{target}.log"
-    
-    linker   = "#{CXX} #{OTHER_FLAGS}  #{linker_objs} #{LDFLAGS} #{linker_output} 2> #{OFTEST_LOG}/#{target}.log"
+    compiler = "#{CXX} #{OTHER_FLAGS} #{CFLAGS} #{} -I ./libs/cpptest/lib/include  #{compiler_outputs} #{compiler_source} 2> #{OFTEST_LOG}/#{target}.compiler.log"
+    linker   = "#{CXX} #{OTHER_FLAGS} #{linker_objs} #{linker_output} #{LDFLAGS}  2> #{OFTEST_LOG}/#{target}.linker.log"
     
     compile_with( "Compiling", target, compiler )
+    puts
     compile_with( "Linking", target, linker  )
 end
 
@@ -282,59 +295,16 @@ end
 
 task :debug_platform do
     puts "Platform info:".cyan
-    puts "-- platform is " + PLATFORM_NAME.red
-    puts "-- arch is " + PLATFORM_ARCH.red
-
-    puts "-- platform defined as " + OS.red
-    puts "-- arch defined as " + ARCH.red
-    puts
 end
 
 # Log paths
 #
 task :debug_paths do
     puts "Paths info:".cyan
-    puts "-- of root is " + OF_ROOT.red
-    puts "-- of libs path is " + OF_LIBS_PATH.red
-    puts "-- of headers path is " + OF_HEADERS_PATH.red
-    puts "-- of lib path is " + OF_LIB_PATH.red
-
-    puts "-- search for of headers at: "
-    OF_HEADERS.each do | p |
-        puts "* "  + p.red
-    end
-
-    puts "-- search for thirdy party headers at: "
-    THIRDPARTY_HEADERS.each do | p |
-        puts "* " +  p.red
-    end
-
-    puts "-- search for thirdy party libs at: "
-    THIRDPARTY_LIBS_PATH.each do | p |
-        puts "* " +  p.red
-    end
-
-    puts "-- oftest root is " + OFTEST_ROOT.red
-
-    puts "-- oftest src is " + OFTEST_SRC.red
-    puts "-- oftest bin is " + OFTEST_BIN.red
-
-    puts "-- oftest libs is " + OFTEST_LIBS.red
-    puts "-- oftest frameworks is " + OFTEST_FRAMEWORKS.red
-
-    puts "-- oftest logs is " + OFTEST_LOG.red
-    puts
 end
 
 # Log paths
 #
 task :debug_targets do
     puts "Targets info:".cyan
-
-    puts "-- tests found: "
-    
-    TARGETS.each do | t |
-        puts "* " + t.red
-    end
-    puts
 end
