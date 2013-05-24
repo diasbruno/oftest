@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'bundler/setup'
+
+require 'colorator'
+require 'api/config'
+require 'api/utils'
+
+########################################
+#
+# openFrameworks tester cli
+#
+########################################
+
+# Select a random header 
+# from openFrameworks.
+#
+def select_random()
+    
+end
+
+# Prints the usage,
+#
+def usage()
+    return "\n\
+usage: tester -[m|r] [-a]\n\
+       tester -i\n\
+       tester -h,--help, help [command]\n\n"
+end
+
+# Main
+#
+def main( args )
+    puts args
+end
+
+main( ARGV )
