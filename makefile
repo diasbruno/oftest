@@ -46,7 +46,7 @@ include ./api/makefiles/$(PLATFORM_LIB_SUBPATH).mk
 CFLAGS += -I./libs/cpptest/lib/include
 LDFLAGS += -L./libs/cpptest/lib/osx/
 
-OF_PROJECT_LIBS += ./libs/cpptest/lib/osx/libcpptest.a
+OF_PROJECT_LIBS += ./libs/cpptest/lib/$(PLATFORM_LIB_SUBPATH)/libcpptest.a
 
 #
 # Tasks
