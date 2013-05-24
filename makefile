@@ -55,19 +55,28 @@ OF_PROJECT_LIBS += ./libs/cpptest/lib/osx/libcpptest.a
 $(TESTS): 
 	@echo Building all tests...$@
 	$(CXX) -c  $(CFLAGS) -MMD -MP -MF build/$@.d -MT build/$@.o -o build/$@.o -c src/test_$@.cpp > logs/$@.compiler.log
-	$(CXX) -o bin/$@ build/$@.o $(OF_PROJECT_ADDONS_OBJS) $(LDFLAGS) ../libs/openFrameworksCompiled/lib/osx/libopenFrameworksDebug.a $(TARGET_LIBS) $(OF_PROJECT_LIBS) $(OF_CORE_LIBS) &> logs/$@.linker.log
+ifeq "$(PLATFORM_LIB_SUBPATH)" "osx"
+	$(CXX) -o bin/$@ build/$@.o $(OF_PROJECT_ADDONS_OBJS) $(LDFLAGS) ../libs/openFrameworksCompiled/lib/$(PLATFORM_LIB_SUBPATH)/libopenFrameworksDebug.a $(TARGET_LIBS) $(OF_PROJECT_LIBS) $(OF_CORE_LIBS) &> logs/$@.linker.log
 
 create_paths:
+	mkdir -p ./bin
 	mkdir -p ./bin/libs
 	mkdir -p ./bin/frameworks
+	mkdir -p ./build
+	mkdir -p ./logs
 
 copy_libs_and_frameworks:
 	@echo Copying libs and fix dylib and Frameworks...
+
+# Now, let's change some stuff.
+ifeq "$(PLATFORM_LIB_SUBPATH)" "linux"
+	@cp -f ../export/linux/libs/* ./bin/libs
+endif
+
+ifeq "$(PLATFORM_LIB_SUBPATH)" "osx"
 	@cp -f ../libs/fmodex/lib/osx/* ./bin/libs
 	@cp -rf ../libs/glut/lib/osx/GLUT.framework ./bin/frameworks/GLUT.framework
         
-#   Now, let's change some stuff.
-ifeq "$(PLATFORM_LIB_SUBPATH)" "osx"
 	@$(INTX) -id @executable_path/libs/libfmodex.dylib ./bin/libs/libfmodex.dylib
 	@$(INTX) -change @executable_path/../Frameworks/GLUT.framework/Versions/A/GLUT @executable_path/frameworks/GLUT.framework/Versions/A/GLUT -id @executable_path/frameworks/GLUT.framework/Versions/A/GLUT ./bin/frameworks/GLUT.framework/GLUT
 endif
