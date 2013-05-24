@@ -64,6 +64,9 @@ create_paths:
 	mkdir -p ./build
 	mkdir -p ./logs
 
+afterplatform: tests
+	@echo ...
+
 copy_libs_and_frameworks:
 	@echo Copying libs and fix dylib and Frameworks...
 
@@ -87,7 +90,10 @@ tests: create_paths copy_libs_and_frameworks $(TESTS)
 	@echo Compiling $(APPNAME) for Tests
 	@echo $(TESTS)
 
+.PHONY: clean tests
+
 clean:
 	rm -rf bin/*
 	rm -rf build/*
 
+all: clean tests
