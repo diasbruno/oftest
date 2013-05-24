@@ -3,6 +3,9 @@
 # travis will run as another command.
 #
 
+# of root
+OF_ROOT=..
+
 SRC_DIR=src
 # This is used for the GLUT hack,
 # the application looks for the framework in '../frameworks'
@@ -24,67 +27,66 @@ ifneq "$(TEST)" ""
 	TESTS=$(TEST)
 endif
 
-# Check platform...
+# define the OF_SHARED_MAKEFILES location
+OF_SHARED_MAKEFILES_PATH=$(OF_ROOT)/libs/openFrameworksCompiled/project/makefileCommon
 
-PLATFORM_NAME=$(shell uname)
-PLATFORM_ARCH=$(shell uname -m)
+include $(OF_SHARED_MAKEFILES_PATH)/config.shared.mk
+include $(OF_SHARED_MAKEFILES_PATH)/config.project.mk
 
-# Include openFrameworks stuff
-include of.mk
+################################################################################
+# PROJECT CFLAGS
+################################################################################
 
-# Mac specific
-ifeq "$(PLATFORM_NAME)" "Darwin"
-	include osx.mk
-	OS=osx
-endif
+# clean it
+ALL_CFLAGS =
+# add the CFLAGS from Makefiles.examples
+ALL_CFLAGS += $(OF_PROJECT_CFLAGS) -I./libs/cpptest/lib/include
 
-# Linux specific
-ifeq "$(PLATFORM_NAME)" "Linux"
-	include linux.mk
-	OS=linux
+# clean up all extra whitespaces in the CFLAGS
+CFLAGS = $(strip $(ALL_CFLAGS))
 
-	ifeq "$(PLATFORM_ARCH)" "x86_64"
-		OS=linux64
-	endif
-endif
+################################################################################
+# PROJECT LDLAGS
+################################################################################
 
-# cpptest headers and Lib
-CFLAGS+=-I$(CPPTEST_PATH)/lib/include
-LFLAGS+=$(CPPTEST_PATH)/lib/$(OS)/libcpptest.a
+PLATFORM_FRAMEWORKS += Foundation Cocoa # snow leopard
+OF_PROJECT_LDFLAGS += $(addprefix -framework ,$(PROJECT_FRAMEWORKS))
+OF_PROJECT_LDFLAGS += $(addprefix -framework ,$(PLATFORM_FRAMEWORKS))
+OF_PROJECT_LDFLAGS += $(addprefix -framework ,$(PROJECT_ADDONS_FRAMEWORKS))
 
-system_info:
-	@echo
-	@echo System info - OS"(" $(OS) ")", Arch"(" $(PLATFORM_ARCH) ")"
-	@echo $(TESTS)
-	@echo 
+# remove fmodex and GLUT
+# use them from ./bin/{frameworks, libs}
+LDF=$(shell echo "$(LDFLAGS)" | sed  -e "s/\-L\.\.\/libs\/fmodex\/lib\/osx//g" -e "s/\.\.\/libs\/glut\/lib\/osx/\.\/bin\/frameworks/g" )
+L=$(strip $(foreach l,$(LDF),$(shell echo "$(l)" | grep -v GLUT. )))
+LIBS=$(shell echo "$(OF_CORE_LIBS)" | sed -e "s/\.\.\/libs\/fmodex\/lib\/osx\/libfmodex\.dylib/\.\/bin\/libs\/libfmodex\.dylib/g" )
+
+
+$(TESTS): 
+	@echo Building all tests...$@
+	$(CXX) -c  $(CFLAGS) -MMD -MP -MF build/$@.d -MT build/$@.o -o build/$@.o -c src/test_$@.cpp > logs/$@.compiler.log
+	$(CXX) -o bin/$@ build/$@.o $(OF_PROJECT_ADDONS_OBJS) -L./libs/cpptest/lib/osx/ $(L) ../libs/openFrameworksCompiled/lib/osx/libopenFrameworksDebug.a $(TARGET_LIBS) ./libs/cpptest/lib/osx/libcpptest.a $(OF_PROJECT_LIBS) $(LIBS)  &> logs/$@.linker.log
 
 create_paths:
-	@echo Creating paths...
-	@mkdir -p $(FRAMEWORKS_DIR) & mkdir -p $(BUILD_DIR) & mkdir -p $(DATA_DIR) & mkdir -p $(RESULTS_DIR) & mkdir -p $(LOG_DIR) &
+	mkdir -p ./bin/libs
+	mkdir -p ./bin/frameworks
 
-## Start: 
-## 		Print system info.
-##		try to create path ./bin ./frameworks ./
-start: system_info create_paths copy_libs
-	@echo Compiling tests...
+copy_libs_and_frameworks:
+	@echo Copying libs and fix dylib and Frameworks...
+	@cp -f ../libs/fmodex/lib/osx/* ./bin/libs
+	@cp -rf ../libs/glut/lib/osx/GLUT.framework ./bin/frameworks/GLUT.framework
+        
+#   Now, let's change some stuff.
+	@/Developer/usr/bin/install_name_tool -id @executable_path/libs/libfmodex.dylib ./bin/libs/libfmodex.dylib
+	@/Developer/usr/bin/install_name_tool -change @executable_path/../Frameworks/GLUT.framework/Versions/A/GLUT @executable_path/frameworks/GLUT.framework/Versions/A/GLUT -id @executable_path/frameworks/GLUT.framework/Versions/A/GLUT ./bin/frameworks/GLUT.framework/GLUT
+
+tests: create_paths copy_libs_and_frameworks $(TESTS) 
+	@echo Compiling OF library for Tests
+	@echo
+	@echo
+	@echo Compiling $(APPNAME) for Tests
 	@echo $(TESTS)
 
-
-run_tests:
-	@./run_test $(TESTS)
-	
-
 clean:
-	@echo Cleaning...
-	@rm -rf $(BUILD_DIR)/*
+	rm -rf bin/*
+	rm -rf build/*
 
-$(TESTS):
-	@echo
-	@echo Compiling test $@
-	@echo
-
-	$(CC) $(ARCH) $(CFLAGS) -MMD -MP -MF $(SRC_DIR)/$@.d -MT $(SRC_DIR)/$@.o -o $(SRC_DIR)/$@.o -c $(SRC_DIR)/test_$@.cpp &> $(LOG_DIR)/$@.log
-
-	$(CC) $(SRC_DIR)/$@.o $(ARCH) $(LFLAGS) -o $(BUILD_DIR)/$@ &> $(LOG_DIR)/$@.log
-
-all: clean start $(TESTS) run_tests
