@@ -1,7 +1,7 @@
 require 'optparse'
 
 require 'colorator'
-require 'api/utils'
+require './api/utils'
 
 # We are going to check for pygments
 # cli's needs colors. 
