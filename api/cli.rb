@@ -6,7 +6,7 @@ require './api/utils'
 # We are going to check for pygments
 # cli's needs colors. 
 #
-PYGMENTS=%x[ which pygmentize ].strip
+PYGMENTS=system "which pygmentize &> /dev/null"
 
 # Select a random header 
 # from openFrameworks.
@@ -25,7 +25,8 @@ end
 def command_create_test( name )
     template = %x[ cat ./api/templates/test.cpp ]    
     # puts system "echo \"#{template.gsub( /\{WHAT\}/, name  )}\" | pygmentize -l cpp"
-    puts "\n// both ofMain.h and cpptest.h includes\n\
+    puts "\n\
+// both ofMain.h and cpptest.h includes\n\
 // will be removed when we glue."
     puts template.gsub( /\{WHAT\}/, name.red  )
 end
