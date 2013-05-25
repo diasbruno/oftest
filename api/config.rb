@@ -105,7 +105,7 @@ module Of
 
         cli.on( "-c", "--create-test [NAME]", String, "Create a new test" ) do | t |
             if not t.to_s.eql? ""
-                puts log( "#{"creating test"}.cyan.bold #{t.to_s.white.bold} "...".cyan.bold" )
+                puts log( "#{"creating test".cyan.bold} #{t.to_s.white.bold} #{"...".cyan.bold}" )
                 command_create_test( t )
             else
                 puts error( "Missing test name." )
