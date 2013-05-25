@@ -4,7 +4,7 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'colorator'
-require 'api/config'
+require './api/config'
 
 
 ########################################
