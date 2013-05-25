@@ -1,23 +1,10 @@
-#!/usr/bin/env ruby
+#!//bin/bash
 
-require 'rubygems'
-require 'bundler/setup'
+# define the env here
 
-require 'colorator'
-require './api/config'
+#export CXX=g++
+#export CC=gcc
 
+#export DIFF_IMAGE=diffimg
 
-########################################
-#
-# openFrameworks tester cli
-#
-########################################
-
-def main( args )
-    # parse argv.
-    #
-    Of::Cli.parse!( args )
-    puts Of::Cli
-end
-
-main( ARGV )
+ruby ./api/tester.rb $@
