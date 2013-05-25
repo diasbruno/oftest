@@ -29,14 +29,3 @@ private:
     }
     
 };
-
-int
-main() {
-    Test::Suite ts_types;
-
-    ts_types.add( auto_ptr<Test::Suite>( new {WHAT}Suite ) );
-
-    Test::TextOutput output( Test::TextOutput::Verbose );
-    
-    return ts_types.run( output );
-}
