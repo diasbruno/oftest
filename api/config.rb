@@ -1,7 +1,13 @@
 require 'colorator'
+require './api/cli'
 
 module Of
-    # Options
+
+    # Cli Options.
+    #
+    class CliOptions < OptionParser
+    end
+    # Compiler Options.
     #
     class CompilerOptions
 
@@ -36,7 +42,7 @@ module Of
         end
     end
 
-    # Paths
+    # Library definitions.
     # It controls a single lib.
     #
     class Library
@@ -72,9 +78,9 @@ module Of
         end
     end
 
-    # Test
+    # Test description.
+    #
     class Test
-
         attr_accessor :name
 
         def compile()
@@ -84,11 +90,44 @@ module Of
         end
     end
 
-
     # Use this.
+    #
     Compiler = CompilerOptions.new
     Of = Library.new
     Oft = Library.new
     Tp = ThirdPartyPaths.new
     Tests = []
+
+    # comand line argv parser
+    Cli = CliOptions.new do | cli |
+        cli.banner = "Usage: tester [options]"
+        cli.separator ""
+
+        cli.on( "-c", "--create-test [NAME]", String, "Create a new test" ) do | t |
+            if not t.to_s.eql? ""
+                puts log( "#{"creating test"}.cyan.bold #{t.to_s.white.bold} "...".cyan.bold" )
+                command_create_test( t )
+            else
+                puts error( "Missing test name." )
+            end
+            exit
+        end
+
+        cli.on( "-l", "--list-tests", "List all tests." ) do
+            puts log( "tests ready to run...\n".cyan.bold )
+            command_list_tests()
+            exit
+        end
+
+        cli.on( "-s", "--select-random-of-header", "If you get bored, write a different random tests. :)" ) do
+            puts log( "here, work on this..." )
+            command_select_random()
+            exit
+        end
+        
+        cli.on_tail( "-h", "--help", "Help" ) do
+            puts cli
+            exit
+        end
+    end
 end

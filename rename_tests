@@ -1,8 +1,0 @@
-#!/bin/bash
-
-T_FILES=$(ls | grep ".cpp")
-echo $T_FILES
-
-for T in $T_FILES; do
-    mv $T test_$T
-done
