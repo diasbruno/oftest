@@ -7,6 +7,7 @@ module Of
     #
     class CliOptions < OptionParser
     end
+
     # Compiler Options.
     #
     class CompilerOptions
@@ -109,6 +110,7 @@ module Of
                 command_create_test( t )
             else
                 puts error( "Missing test name." )
+                puts cli
             end
             exit
         end

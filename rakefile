@@ -31,17 +31,9 @@ require './api/run'
 #  - ARCH
 #
 #  - OF_ROOT
-#  - OF_TEST_ROOT
+#  - OFTEST_ROOT
 #
 #  - OF_LIBS_PATH
-#  - OF_HEADERS_PATH
-#  - OF_LIB_PATH
-#  - OF_HEADERS
-#
-#  - THIRDPARTY_PATHS
-#  - THIRDPARTY_LIBS_PATH
-#  - THIRDPARTY_HEADERS
-#  - THIRDPARTY_LIBS
 #
 #  - OFTEST_SRC
 #  - OFTEST_BIN
