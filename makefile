@@ -1,7 +1,3 @@
-#
-# Don't use \ for multiple lines,
-# travis will run as another command.
-#
 
 # of root
 OF_ROOT=..
