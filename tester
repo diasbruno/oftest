@@ -7,9 +7,8 @@
 
 # try to download rake
 # dependencies.
-RB_GEM_RAKE=$(gem list rake | grep rake)
+gem install rake 
 RB_GEM_COLORATOR=$(gem list colorator | grep colorator)
-[[ "$RB_GEM_RAKE" == "" ]] && gem install rake 
 [[ "$RB_GEM_COLORATOR" == "" ]] && gem install colorator 
 
 # export DIFF_IMAGE=diffimg
