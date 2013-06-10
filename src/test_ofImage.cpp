@@ -1,10 +1,9 @@
 
+#include <fstream>
 #include "cpptest.h"
 
 // include 
 #include "ofImage.h"
-
-using namespace std;
 
 // what test 
 class ofImageSuite 
@@ -12,11 +11,7 @@ class ofImageSuite
 public:
     
     ofImageSuite() {
-        TEST_ADD( ofImageSuite::test_instantiation     )
-//      ofPixels pixels = tImage.getPixels();
-//      if ( pixels.isAllocated() ) {
-//          TEST_ADD( ofImage_Suite::test_initialized_pixels    )
-//      }
+        TEST_ADD( ofImageSuite::test_instantiation )
     }
     
     ofImage tImage;
@@ -42,23 +37,41 @@ private:
     
     void 
     test_initialized_pixels() {
-        // the default initialization of ofImage
-        // don't allocate any pixels on the initialization.
-        // this should be the correct behavior?
-//      TEST_ASSERT( tImage.getPixels().isAllocated() == false )
-//      TEST_ASSERT( tImage.getPixels().getWidth() == 0 )
-//      TEST_ASSERT( tImage.getPixels().getHeight() == 0 )
     }
-    
 };
+
+std::string
+log_file( const char* name ) {
+    std::string n;
+    n = "../logs/";
+    n += name;
+    n += ".results.log";
+    return n;
+}
+
+int
+run_test( const char* name, Test::Suite* test ) {
+    int           test_result = 0;
+
+    Test::Suite   ts_types;
+
+    std::ofstream results( name
+                         , std::ofstream::out | std::ofstream::app 
+                         );
+
+    ts_types.add( auto_ptr<Test::Suite>( test ) );
+
+    Test::TextOutput output( Test::TextOutput::Verbose, results );
+    test_result = ts_types.run( output );
+
+    results.close();
+
+    return test_result;
+}
 
 int
 main() {
-    Test::Suite ts_types;
-
-    ts_types.add( auto_ptr<Test::Suite>( new ofImageSuite ) );
-
-    Test::TextOutput output( Test::TextOutput::Verbose );
-    
-    return ts_types.run( output );
+    return run_test( log_file( "ofImage" ).c_str()
+                   , new ofImageSuite 
+                   );
 }
