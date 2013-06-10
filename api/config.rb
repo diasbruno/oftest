@@ -121,6 +121,18 @@ module Of
             exit
         end
 
+        cli.on( "-r", String, "List all tests." ) do | opt |
+            puts log( "building tests with rake...\n".cyan.bold )
+            system "rake"
+            exit
+        end
+
+        cli.on( "-m", String, "List all tests." ) do | opt |
+            puts log( "building tests with make...\n".cyan.bold )
+            system "make"
+            exit
+        end
+
         cli.on( "-s", "--select-random-of-header", "If you get bored, write a different random tests. :)" ) do
             puts log( "here, work on this..." )
             command_select_random()
