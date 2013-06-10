@@ -5,6 +5,13 @@
 [ "$CXX" == "" ] && echo "Setting \$CXX to g++..." && export CXX=g++
 [ "$CC" == "" ] && echo "Setting \$CC to gcc..." && export CC=gcc
 
+# try to download rake
+# dependencies.
+RB_GEM_RAKE=$(gem list rake | grep rake)
+RB_GEM_COLORATOR=$(gem list colorator | grep colorator)
+[[ "$RB_GEM_RAKE" == "" ]] && gem install rake 
+[[ "$RB_GEM_COLORATOR" == "" ]] && gem install colorator 
+
 # export DIFF_IMAGE=diffimg
 
 ruby ./api/tester.rb $@
