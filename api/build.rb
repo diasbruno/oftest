@@ -11,19 +11,6 @@ task :before  do
 
     system "mkdir -p #{OFTEST_LOG}"
     
-    if /linux/.match( OS )
-    
-        Dir.chdir( "../scripts/linux" ) do
-            compiled = system "sudo ./compileOF.sh >& #{OFTEST_LOG}/of.log"
-            print "Compiling OF...".cyan
-            if compiled
-                puts "[Ok]".green
-            else
-                puts "[Fail]".red
-            end
-        end
-    end
-
     # FIXME: move to Test class.
     CXX = Of::Compiler.cxx
     CC = Of::Compiler.cc
