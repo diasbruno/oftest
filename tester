@@ -1,10 +1,10 @@
 #!//bin/bash
 
-# define the env here
+# define your env here
+# rake will use them.
+[ "$CXX" == "" ] && echo "Setting \$CXX to g++..." && export CXX=g++
+[ "$CC" == "" ] && echo "Setting \$CC to gcc..." && export CC=gcc
 
-#export CXX=g++
-#export CC=gcc
-
-#export DIFF_IMAGE=diffimg
+# export DIFF_IMAGE=diffimg
 
 ruby ./api/tester.rb $@
