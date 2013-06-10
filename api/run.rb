@@ -14,4 +14,5 @@ task :run_tests, [ :targets ] do | t, targets |
             log = system "./#{t}"
         end
     end
+    puts ""
 end

@@ -1,85 +1,59 @@
-# Headers
+#
+# Dependencies
+#
 require 'rubygems'
 require 'bundler/setup'
-
 require 'colorator'
-
+#
+# Api
+#
 require './api/config'
 require './api/utils'
 require './api/tasks/linux'
 require './api/tasks/linux64'
 require './api/tasks/osx'
+require './api/help'
+require './api/setup'
+require './api/clean'
+require './api/build'
 require './api/run'
+require './api/debug'
 
-#############################################################
+#########################################################################
 #
 #  Usage:
 #
-#  - rake (runs all tests)
-#  - rake Test (runs all tests)
-#  - rake Test["ofColor ofRectangle"] (runs this tests)
-#  - rake Clean (prints too much information)
-#  - rake Debug (prints too much information)
-#  - rake Help (prints this header :) )
-#
-#  Setup task wil define:
-#
-#  - PLATFORM_NAME
-#  - PLATFORM_ARCH
-#
-#  - OS
-#  - ARCH
-#
-#  - OF_ROOT
-#  - OFTEST_ROOT
-#
-#  - OF_LIBS_PATH
-#
-#  - OFTEST_SRC
-#  - OFTEST_BIN
-#  - OFTEST_BUILD
-#
-#  - OFTEST_LIBS
-#  - OFTEST_FRAMEWORKS
-#
-#  - OFTEST_RESULTS
-#  - OFTEST_ERRORS
-#
-#  - OFTEST_PREFIX
-#
+#  - rake                              ( runs all tests )
+#  - rake test                         ( runs all tests )
+#  - rake test["ofColor ofRectangle"]  ( runs this tests )
+#  - rake clean                        ( clean bin, build and logs )
+#  - rake debug                        ( prints too much information )
+#  - rake help                         ( prints this header :) )
+# 
 #  FIXME: there are some utils that can be refactored.
 #  FIXME: include optparse.
 #
-#############################################################
+#########################################################################
 
-# Default: Run all tests
+# Default: Build and run all tests
+# NOTE: All tasks needs to run setup first.
 #
-task :default => [ :test ]
+task :default => [ :setup, 
+                   :test 
+                 ]
 task :clean   => [ :setup,
-                   :clean_all, 
+                   :clean_all
                  ]
 task :debug   => [ :setup, 
                    :debug_all
                  ]
 
-# Help info. (yeah, must have...very important! :)
-#
-task :help do
-    puts "Usage:\n".cyan   
-    puts "rake (runs all tests)"
-    puts "rake " + "Test".red + " (runs all tests)"
-    puts "rake " + "Test[\"ofColor ofRectangle\"]".red + " (runs this tests)"
-    puts "rake " + "Clean".red + " (prints too much information)"
-    puts "rake " + "Debug".red + " (prints too much information)"
-    puts "rake " + "Help".red + " (prints this header :) )"
-end
-
 # Test task
-#
 # :args => task arguments eg. rake Test["ofColor ofRectangle"]
 #
-task :test, [ :args ] => [ :setup ] do | t, args |
-    # settings deafult
+task :test, [ :args ] => [ :setup, :clean_all ] do | t, args |
+    puts "Build and run tests...".cyan
+    # settings default
     args.with_defaults({:arg => "" })
     ts = args[ :args ].to_s.strip
 
@@ -91,212 +65,4 @@ task :test, [ :args ] => [ :setup ] do | t, args |
     # First we compile.
     Rake::Task[ :compile_tests ].execute()
     Rake::Task[ :after ].execute()
-end
-
-# Set up the environment
-# 
-task :setup do
-    puts "Setting up the environment...".cyan
-    # System
-    #
-    PLATFORM_NAME = %x[ uname ].sub( "\n", "" )
-    PLATFORM_ARCH = %x[ uname -m ].sub( "\n", "" )
-    
-    # Check ENV
-    # to change the compiler
-    # do it in the task. api/task/osx.rb
-    #
-    Of::Compiler.cxx = ENV["CXX"] if not ENV["CXX"].eql? ""
-    Of::Compiler.cc = ENV["CC"] if not ENV["CC"].eql? ""
-    
-    # Detect platfrom.
-    OS = Of::Compiler.detect_platform()
-    
-    # save the absolute path
-    # it will make it easier 
-    # to move back
-    OF_ROOT = ".."
-    OFTEST_ROOT  = "."
-    
-    # openFrameworks
-    #
-    OF_LIBS_PATH = "#{OF_ROOT}/libs"
-
-    # openFrameworks can be included directly
-    #
-    Of::Of.path = "openFrameworks"
-    Of::Of.path = "#{OF_LIBS_PATH}/openFrameworks"
-    Of::Of.path_include = "#{OF_LIBS_PATH}/openFrameworks"
-    Of::Of.path_lib = "#{OF_LIBS_PATH}/openFrameworksCompiled/lib/#{OS}"
-
-    # find_include_paths :: String -> [String]
-    #
-    Of::Of.headers = find_all_includes_paths( Of::Of.path_include, /\.\w+/ )
-
-    # finding third party libs
-    #
-    find_paths( OF_LIBS_PATH, /openFrameworks/ ).each do | t |
-        tp = Of::Library.new
-        tp.name         = t.sub( "#{OF_LIBS_PATH}/", "" )
-        tp.path         = t
-        # headers section
-        #
-        tp.path_include = "#{t}/include"
-        tp.headers      = find_all_includes_paths( tp.path_include, /\.\w+/ )
-        # libs set only if it exists
-        #
-        if File.directory?( "#{t}/lib/#{OS}" )
-            tp.path_lib     = "#{t}/lib/#{OS}"
-            tp.libs         = find_libs( t, OS )
-        end
-        # include the library in the list.
-        #
-        Of::Tp.libs.push tp
-    end
-    # OF test
-    #
-    OFTEST_SRC = "#{OFTEST_ROOT}/src"
-    OFTEST_BIN = "#{OFTEST_ROOT}/bin"
-    OFTEST_BUILD = "#{OFTEST_ROOT}/build"
-
-    OFTEST_LIBS = "#{OFTEST_BIN}/libs"
-    OFTEST_FRAMEWORKS = "#{OFTEST_BIN}/frameworks"
-
-    OFTEST_LOG = %x[ pwd ].strip + "/logs"
-
-    OFTEST_PREFIX = "test_"
-end
-
-# Clean up
-#
-task :clean_all do
-    puts "Clean up...".red
-    
-    # Delete everything in the bin folder.
-    #
-    FileList[ "#{OFTEST_BUILD}/*" ].each do | c |
-        file = c.gsub( "#{OFTEST_BUILD}/", "" )
-        puts "\[deleting\] #{file}"
-        system "rm -rf #{c}"
-    end
-end
-
-# Before everything
-# 
-task :before  do 
-    puts "Creating paths...".cyan
-
-    system "mkdir -p #{OFTEST_BIN}"
-    system "mkdir -p #{OFTEST_BUILD}"
-
-    system "mkdir -p #{OFTEST_LIBS}"
-    system "mkdir -p #{OFTEST_FRAMEWORKS}"
-
-    system "mkdir -p #{OFTEST_LOG}"
-    
-    if /linux/.match( OS )
-    
-        Dir.chdir( "../scripts/linux" ) do
-            compiled = system "sudo ./compileOF.sh >& #{OFTEST_LOG}/of.log"
-            print "Compiling OF...".cyan
-            if compiled
-                puts "[Ok]".green
-            else
-                puts "[Fail]".red
-            end
-        end
-    end
-
-    # FIXME: move to Test class.
-    CXX = Of::Compiler.cxx
-    CC = Of::Compiler.cc
-
-    Rake::Task[ "#{OS}:before" ].execute( TARGETS  )
-end
-
-# Before everything
-# 
-task :compile_tests  do 
-    Rake::Task[ "#{OS}:setup" ].execute()
-
-    TARGETS.each do | target |
-        Rake::Task[ :compile ].execute( target )
-    end
-end
-
-# After
-# 
-task :after do
-    # ...then, we run..
-    Rake::Task[ :run_tests ].execute( TARGETS  )
-end
-
-#
-# Befero each compilation
-# it will set this vars.
-#
-compiler_outputs = ""
-compiler_source  = ""
-linker_output    = ""
-linker_objs      = ""
-
-# Set up vars for each
-#
-task :before_compile, [ :target ] do | t, target |
-
-    output           = generate_output_for_file( target )
-    compiler_outputs = make_compiler_output( OFTEST_BUILD, output )
-    compiler_source  = make_compiler_source( OFTEST_SRC, output )
-    linker_objs      = make_linker_obj( OFTEST_BUILD, output )
-    linker_output    = make_linker_output( OFTEST_BIN, output )
-end
-
-# Compile and link
-#
-task :compile, [ :target ] do | t, target |
-    Rake::Task[ :before_compile ].execute( target )
-    puts
-    compiler = "#{CXX} #{OTHER_FLAGS} #{CFLAGS} #{} -I ./libs/cpptest/lib/include  #{compiler_outputs} #{compiler_source} 2> #{OFTEST_LOG}/#{target}.compiler.log"
-    linker   = "#{CXX} #{OTHER_FLAGS} #{linker_objs} #{linker_output} #{LDFLAGS}  2> #{OFTEST_LOG}/#{target}.linker.log"
-    
-    compile_with( "Compiling", target, compiler )
-    puts
-    compile_with( "Linking", target, linker  )
-end
-
-# After everything.
-#
-task :after_compile, [ :args ] do | t, arg |
-    Rake::Task[ "#{OS}:after_all" ].execute()    
-end
-
-#
-# Debug tasks
-#
-
-# Log everything.
-#
-task :debug_all => [ :debug_platform,
-                     :debug_paths,  
-                     :debug_targets
-                   ] do
-   Rake::Task[ "#{OS}:debug" ].execute()
-end
-
-# Log platform
-
-task :debug_platform do
-    puts "Platform info:".cyan
-end
-
-# Log paths
-#
-task :debug_paths do
-    puts "Paths info:".cyan
-end
-
-# Log paths
-#
-task :debug_targets do
-    puts "Targets info:".cyan
 end
