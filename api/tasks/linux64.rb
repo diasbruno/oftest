@@ -13,6 +13,7 @@ namespace :linux64 do
     # Set up all compiler stuff
     #
     task :setup do
+        puts "Configuring for Linux64 build...".cyan
 
         OF = Of::Of
         TP = Of::Tp

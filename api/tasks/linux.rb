@@ -14,7 +14,7 @@ namespace :linux do
     # Set up all compiler stuff
     #
     task :setup do
-        puts "Configuring for Mac build...".cyan
+        puts "Configuring for Linux build...".cyan
 
         OF = Of::Of
         TP = Of::Tp
