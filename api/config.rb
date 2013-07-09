@@ -113,6 +113,13 @@ module Of
         cli.banner = "Usage: tester [options]"
         cli.separator ""
 
+        cli.on( "-nb", "Don't allow tests that might block.") do | opt |
+            puts "Don't allow tests that might block."
+			config_file = File.new("src/config.h", "w")
+			config_file.write( "#define DONT_BLOCK 1" )
+            config_file.close
+        end
+
         cli.on( "-c", "--create-test [NAME]", String, "Create a new test" ) do | t |
             if not t.to_s.eql? ""
                 puts log( "#{"creating test".cyan.bold} #{t.to_s.white.bold} #{"...".cyan.bold}" )
