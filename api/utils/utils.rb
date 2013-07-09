@@ -165,13 +165,11 @@ def readFile( file )
 end
 
 # compile_with :: String -> Test -> String -> IO Bool
-def compile_with( log, target, compiler_str )
+def build_with( log, target, compiler_str )
     print "#{log} #{target.name}: ", compiler_str.cyan.bold, " "
     if system compiler_str
-        puts "[Ok]".green
         return true
     else
-        puts "[Fail]".red
         return false
     end
 end
