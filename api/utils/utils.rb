@@ -16,7 +16,13 @@ end
 # Give it a name and receive
 # a Test.
 #
+# test_factory :: String -> Test
 def test_factory( name )
+    test = Of::Test.new 
+    test.name = name
+    test.compiler_log = "#{name}.compiler.log"
+    test.linker_log   = "#{name}.linker.log"
+    return test
 end
 
 # fold :: a -> [a] -> a
@@ -62,8 +68,6 @@ end
 
 # Generate outputs for a target
 #
-# t => target
-#
 # return Array
 def generate_output_for_file( t )
     outputs = []
@@ -74,9 +78,6 @@ def generate_output_for_file( t )
 end
 
 # Get all tests from 'src'.
-#
-# name => the test name.
-# ext  => extension to be added.
 # 
 # return String
 def make_file_ext( name, ext )
@@ -153,12 +154,25 @@ def check_pkg_config( what )
     return system "pkg-config #{what} --exists"
 end
 
+# Read a file.
+# readFile :: String -> String
+def readFile( file )
+    content = ""
+    fileIO = File.new( file, "r" )
+    content = fileIO.read
+    fileIO.close
+    return content
+end
+
+# compile_with :: String -> Test -> String -> IO Bool
 def compile_with( log, target, compiler_str )
-    print "#{log} #{target}: ", compiler_str.cyan.bold, " "
+    print "#{log} #{target.name}: ", compiler_str.cyan.bold, " "
     if system compiler_str
         puts "[Ok]".green
+        return true
     else
         puts "[Fail]".red
+        return false
     end
 end
 
