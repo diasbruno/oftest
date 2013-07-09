@@ -7,6 +7,7 @@ export CC=gcc
 
 # always force to download dependencies.
 gem install rake 
+gem install bundler 
 gem install colorator 
 
 # export DIFF_IMAGE=diffimg
