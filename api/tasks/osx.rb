@@ -1,6 +1,3 @@
-require 'colorator'
-require './api/utils'
-
 namespace :osx do
 
     # Before

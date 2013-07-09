@@ -1,6 +1,3 @@
-require 'colorator'
-require './api/utils'
-
 namespace :linux do
 
     # Before
@@ -118,8 +115,6 @@ namespace :linux do
 
         LDFLAGS = "#{ldflags}"
 
-        puts LDFLAGS
-        # fail "1"
     end
 
 

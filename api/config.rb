@@ -1,4 +1,3 @@
-require 'colorator'
 require './api/cli'
 
 module Of
