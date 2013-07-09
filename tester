@@ -1,15 +1,13 @@
-#!//bin/bash
+#!/bin/bash
 
 # define your env here
 # rake will use them.
-[ "$CXX" == "" ] && echo "Setting \$CXX to g++..." && export CXX=g++
-[ "$CC" == "" ] && echo "Setting \$CC to gcc..." && export CC=gcc
+export CXX=g++
+export CC=gcc
 
-# try to download rake
-# dependencies.
+# always force to download dependencies.
 gem install rake 
-RB_GEM_COLORATOR=$(gem list colorator | grep colorator)
-[[ "$RB_GEM_COLORATOR" == "" ]] && gem install colorator 
+gem install colorator 
 
 # export DIFF_IMAGE=diffimg
 
