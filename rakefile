@@ -8,7 +8,7 @@ require 'colorator'
 # Api
 #
 require './api/config'
-require './api/utils'
+require './api/utils/utils'
 require './api/tasks/linux'
 require './api/tasks/linux64'
 require './api/tasks/osx'
@@ -58,11 +58,16 @@ task :test, [ :args ] => [ :setup, :clean_all ] do | t, args |
     ts = args[ :args ].to_s.strip
 
     # parse tests from args
-    TARGETS = parse_tests( ts );
-
+    tests = parse_tests( ts )
+    # tests_objs :: [Test]
+    tests_objs = []
+    tests.each do | t |
+        tests_objs.push test_factory( t )
+    end
+        
     # FIXME: glue all...
     Rake::Task[ :before ].execute()
     # First we compile.
-    Rake::Task[ :compile_tests ].execute()
-    Rake::Task[ :after ].execute()
+    Rake::Task[ :compile_tests ].execute( tests_objs )
+    Rake::Task[ :after ].execute( tests_objs )
 end

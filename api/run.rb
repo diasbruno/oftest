@@ -1,17 +1,28 @@
-require 'colorator'
-require './api/utils'
-
 # Run all defined tests.
 #
-task :run_tests, [ :targets ] do | t, targets |
+task :run_tests, [ :tests ] do | t, tests |
     puts "\nRunning tests\n".cyan
     
-    puts "Testing...".cyan
-    
     Dir.chdir( OFTEST_BIN ) do
-        targets.each do | t |
-            print "-- #{t}"
-            log = system "./#{t}"
+        tests.each do | test |
+            puts
+            puts "-- #{test.name}"
+
+            if test.compiled
+                if test.linked
+                    system "./#{test.name}"
+                else
+                    puts 
+                    puts "#{test.name} linker log...".red
+                    print test.readLinkerLog()
+                    puts
+                end
+            else
+                puts 
+                puts "#{test.name} compiler log...".red
+                print test.readCompilerLog()
+                puts
+            end
         end
     end
     puts ""

@@ -82,13 +82,23 @@ module Of
     # Test description.
     #
     class Test
+        # Name
         attr_accessor :name
+        # Compiler and Linker string.
+        attr_accessor :compiler, :linker
+        # logs
+        attr_accessor :compiler_log, :linker_log
+        # Compiler and linker results.
+        attr_accessor :compiled, :linked
 
-        def compile()
+        def readCompilerLog()
+            return readFile( "#{OFTEST_LOG}/#{compiler_log}" )
         end
 
-        def link()
+        def readLinkerLog()
+            return readFile( "#{OFTEST_LOG}/#{linker_log}" )
         end
+
     end
 
     # Use this.

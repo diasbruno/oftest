@@ -15,24 +15,27 @@ task :before  do
     CXX = Of::Compiler.cxx
     CC = Of::Compiler.cc
 
-    Rake::Task[ "#{OS}:before" ].execute( TARGETS  )
+    Rake::Task[ "#{OS}:before" ].execute()
 end
 
 # Before everything
 # 
-task :compile_tests  do 
+task :compile_tests, [ :tests ]  do | t, tests |
     Rake::Task[ "#{OS}:setup" ].execute()
+    puts 
 
-    TARGETS.each do | target |
-        Rake::Task[ :compile ].execute( target )
+    tests.each do | test |
+        print "Compiling test: ".white.bold 
+        puts test.name.red
+        Rake::Task[ :compile ].execute( test )
     end
 end
 
 # After
 # 
-task :after do
+task :after, [ :tests ] do | t, tests |
     # ...then, we run..
-    Rake::Task[ :run_tests ].execute( TARGETS  )
+    Rake::Task[ :run_tests ].execute( tests )
 end
 
 #
@@ -47,7 +50,7 @@ linker_objs      = ""
 # Set up vars for each
 #
 task :before_compile, [ :target ] do | t, target |
-    output           = generate_output_for_file( target )
+    output           = generate_output_for_file( target.name )
     compiler_outputs = make_compiler_output( OFTEST_BUILD, output )
     compiler_source  = make_compiler_source( OFTEST_SRC, output )
     linker_objs      = make_linker_obj( OFTEST_BUILD, output )
@@ -56,15 +59,20 @@ end
 
 # Compile and link
 #
-task :compile, [ :target ] do | t, target |
-    Rake::Task[ :before_compile ].execute( target )
+task :compile, [ :test ] do | t, test |
+    Rake::Task[ :before_compile ].execute( test )
     puts
-    compiler = "#{CXX} #{OTHER_FLAGS} #{CFLAGS} #{} -I ./libs/cpptest/lib/include  #{compiler_outputs} #{compiler_source} 2> #{OFTEST_LOG}/#{target}.compiler.log"
-    linker   = "#{CXX} #{OTHER_FLAGS} #{linker_objs} #{linker_output} #{LDFLAGS}  2> #{OFTEST_LOG}/#{target}.linker.log"
+
+    # write the compiler and linked string.
+    test.compiler = "#{CXX} #{OTHER_FLAGS} #{CFLAGS} -I ./libs/cpptest/lib/include  #{compiler_outputs} #{compiler_source} 2> #{OFTEST_LOG}/#{test.compiler_log}"
+    test.linker   = "#{CXX} #{OTHER_FLAGS} #{linker_objs} #{linker_output} #{LDFLAGS}  2> #{OFTEST_LOG}/#{test.linker_log}"
     
-    compile_with( "Compiling", target, compiler )
+    test.compiled = compile_with( "Compiling", test, test.compiler )
+
+    if test.compiled
+        test.linked = compile_with( "Linking", test, test.linker )
+    end
     puts
-    compile_with( "Linking", target, linker  )
 end
 
 # After everything.
