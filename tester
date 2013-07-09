@@ -6,8 +6,8 @@ export CXX=g++
 export CC=gcc
 
 # always force to download dependencies.
-gem install bundler 
-bundler install
+sudo gem install bundler 
+sudo bundler install
 # export DIFF_IMAGE=diffimg
 
 ruby ./api/tester.rb $@
