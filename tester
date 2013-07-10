@@ -10,5 +10,8 @@ sudo gem install rake
 sudo gem install colorator
 # export DIFF_IMAGE=diffimg
 
-ruby ./api/tester.rb $@
-exit $?
+ruby ./api/tester.rb $@ 
+tester=$(cat "./logs/exit_code.txt")
+if [[ "$tester" != "0" ]] ; then
+    exit 1
+fi

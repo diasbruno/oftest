@@ -10,9 +10,9 @@ task :run_tests, [ :tests ] do | t, tests |
             puts
             puts "-- #{test.name}"
 
-            validate = validate && test.compiled
+            validate = validate & test.compiled
             if test.compiled
-                validate = validate && test.linked
+                validate = validate & test.linked
                 if test.linked
                     system "./#{test.name}"
                 else
@@ -29,9 +29,15 @@ task :run_tests, [ :tests ] do | t, tests |
             end
         end
     end
-    if not validate
-        puts "The test failed because one of the tests has not compiled correctly."
-        fail "1"
-    end
+    # this is silly, but works...
+    File.open( "logs/exit_code.txt", 'w') { |file| 
+        r = ""
+        if validate
+            r = "0"
+        else
+            r = "1"
+        end
+        file.write(r) 
+    }
     puts ""
 end
