@@ -6,8 +6,8 @@ export CXX=g++
 export CC=gcc
 
 # always force to download dependencies.
-sudo gem install bundler 
-sudo bundler install
+sudo gem install rake
+sudo gem install colorator
 # export DIFF_IMAGE=diffimg
 
 ruby ./api/tester.rb $@

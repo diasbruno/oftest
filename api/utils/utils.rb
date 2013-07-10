@@ -166,7 +166,7 @@ end
 
 # compile_with :: String -> Test -> String -> IO Bool
 def build_with( log, target, compiler_str )
-    print "#{log} #{target.name}: ", compiler_str.cyan.bold, " "
+    print "#{log}: ", compiler_str.cyan.bold, " "
     if system compiler_str
         return true
     else

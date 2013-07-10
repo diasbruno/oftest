@@ -2,7 +2,6 @@
 # Dependencies
 #
 require 'rubygems'
-require 'bundler/setup'
 require 'colorator'
 #
 # Api
