@@ -11,3 +11,4 @@ sudo gem install colorator
 # export DIFF_IMAGE=diffimg
 
 ruby ./api/tester.rb $@
+exit $?

@@ -67,8 +67,6 @@ task :compile, [ :test ] do | t, test |
     test.compiler = "#{CXX} #{OTHER_FLAGS} #{CFLAGS} -I ./libs/cpptest/lib/include  #{compiler_outputs} #{compiler_source} 2> #{OFTEST_LOG}/#{test.compiler_log}"
     test.linker   = "#{CXX} #{OTHER_FLAGS} #{linker_objs} #{linker_output} #{LDFLAGS}  2> #{OFTEST_LOG}/#{test.linker_log}"
     
-    test.compiled = 
-
     if build_with( "Compiling", test, test.compiler )
         test.compiled = true
         puts "[Ok]".green
