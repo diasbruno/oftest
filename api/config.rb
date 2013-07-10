@@ -90,6 +90,11 @@ module Of
         # Compiler and linker results.
         attr_accessor :compiled, :linked
 
+        def initialize()
+            compiled = false
+            linked = false
+        end
+
         def readCompilerLog()
             return readFile( "#{OFTEST_LOG}/#{compiler_log}" )
         end
