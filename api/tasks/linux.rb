@@ -106,14 +106,11 @@ namespace :linux do
         ldflags = "#{ldflags} -Wl,-rpath=./libs"
 
         ldflags = "#{ldflags} -L#{OF.path_lib} -lopenFrameworksDebug"
-        ldflags = "#{ldflags} -L./libs/cpptest/lib/#{OS} -lcpptest"
+        ldflags = "#{ldflags} -L./libs/cpptest/lib/#{OS} -lcpptest #{tp_search} #{tp_libs}"
 
         ldflags = "#{ldflags} #{pkg_libs} -lfreeimage -lfmodex -lFLAC -logg -lglut -lvorbis -ljack"
-        ldflags = "#{ldflags} #{tp_search} #{tp_libs}"
+        ldflags = "#{ldflags}"
         
-        # we need to exlude poco 
-        ldflags = "#{ldflags} -lPocoCrypto -lPocoNetSSL -lPocoNet -lPocoXML -lPocoFoundation -lPocoUtil"
-
         LDFLAGS = "#{ldflags}"
 
     end
