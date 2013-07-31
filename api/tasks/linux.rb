@@ -62,13 +62,14 @@ namespace :linux do
         TP.libs.each do | lib |
             # exclude what should not be included
             # quicktime is not use
-            headers = fold( "-I ", lib.headers ) if not /quicktime/.match( lib.name )
+            headers = fold( "-I ", lib.headers ) if not /quicktime|poco/.match( lib.name )
             # poco we just need poco/include
-            # headers = "-I #{lib.path_include}" if /poco/.match( lib.name )
             
             tp_headers.push headers
         end
-        
+
+        tp_headers.push "-I ../libs/poco/include"
+
         cflags = "#{cflags} #{tp_headers.join( " " )}"
         cflags = "#{cflags}"
 
