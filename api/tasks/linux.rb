@@ -96,7 +96,15 @@ namespace :linux do
             
             tp_libs.push libs
         end
-        
+
+        # Inject Poco
+        tp_libs.push "../libs/poco/lib/linux/libPocoNetSSL.a"
+        tp_libs.push "../libs/poco/lib/linux/libPocoNet.a"
+        tp_libs.push "../libs/poco/lib/linux/libPocoCrypto.a"
+        tp_libs.push "../libs/poco/lib/linux/libPocoUtil.a"
+        tp_libs.push "../libs/poco/lib/linux/libPocoXML.a"
+        tp_libs.push "../libs/poco/lib/linux/libPocoFoundation.a"
+
         # inject fmodex ./bin/libs
         tp_search.push "./bin/libs"
 
