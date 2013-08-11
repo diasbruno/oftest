@@ -5,12 +5,9 @@
 export CXX=g++
 export CC=gcc
 
-# always force to download dependencies.
-sudo gem install rake
-sudo gem install colorator
 # export DIFF_IMAGE=diffimg
 
-ruby ./api/tester.rb $@ 
+ruby ./api/tester.rb $@
 tester=$(cat "./logs/exit_code.txt")
 if [[ "$tester" != "0" ]] ; then
     exit 1
