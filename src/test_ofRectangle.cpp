@@ -4,14 +4,13 @@
 #include "ofRectangle.h"
 #include "ofPoint.h"
 
-class ofRectangleSuite 
+class ofRectangleSuite
     : public Test::Suite {
 public:
-    
+
     ofRectangleSuite() {
         TEST_ADD( ofRectangleSuite::test_instantiation )
         TEST_ADD( ofRectangleSuite::test_instantiation_with_x_y_width_height )
-        TEST_ADD( ofRectangleSuite::test_instantiation_with_points_position_dimension )
         TEST_ADD( ofRectangleSuite::test_instantiation_with_ofRectangle )
         TEST_ADD( ofRectangleSuite::test_operators )
 
@@ -20,23 +19,23 @@ public:
         TEST_ADD( ofRectangleSuite::test_getters_top_right_bottom_left_center )
         TEST_ADD( ofRectangleSuite::test_getters_area_perimeter )
     }
-    
+
     ofRectangle rect;
     float x;
     float y;
     float width;
     float height;
-    
+
 protected:
-    
-    void 
+
+    void
     setup() {}
 
-    void 
+    void
     tear_down() {}
-    
+
 private:
-    
+
     void
     reset(ofRectangle& r) {
         x      = ofRandom( 100 );
@@ -48,7 +47,7 @@ private:
 
     // Instantiations
 
-    void 
+    void
     test_instantiation() {
         reset( rect );
         TEST_ASSERT( rect.x      == x )
@@ -57,25 +56,14 @@ private:
         TEST_ASSERT( rect.height == height )
     }
 
-    void 
+    void
     test_instantiation_with_x_y_width_height() {
         reset( rect );
         ofRectangle rect2( x, y, width, height );
         TEST_ASSERT( rect2 == rect )
     }
 
-    void 
-    test_instantiation_with_points_position_dimension() {
-        ofPoint position( 10.0, 10.0 );
-        ofPoint dimension( 10.0, 10.0 );
-        ofRectangle rect2( position, dimension );
-        TEST_ASSERT( rect2.x      == 10.0 )
-        TEST_ASSERT( rect2.y      == 10.0 )
-        TEST_ASSERT( rect2.width  ==  0.0 )
-        TEST_ASSERT( rect2.height ==  0.0 )
-    }
-
-    void 
+    void
     test_instantiation_with_ofRectangle() {
         reset( rect );
         ofRectangle rect2( rect );
@@ -117,7 +105,7 @@ private:
         reset( rect );
         TEST_ASSERT( rect.getMin() == ofPoint( x, y )  )
         TEST_ASSERT( rect.getMax() == ofPoint( x + width, y + height )  )
-    
+
         TEST_ASSERT( rect.getMinX() == x )
         TEST_ASSERT( rect.getMaxX() == x + width )
         TEST_ASSERT( rect.getMinY() == y )
@@ -139,10 +127,10 @@ private:
         TEST_ASSERT( rect.getTopRight()    == TR )
         TEST_ASSERT( rect.getBottomLeft()  == BL )
         TEST_ASSERT( rect.getBottomRight() == BR )
-    
-        ofPoint CENTER( 
+
+        ofPoint CENTER(
             rect.x + rect.width * 0.5f
-         ,  rect.y + rect.height * 0.5f 
+         ,  rect.y + rect.height * 0.5f
         );
         TEST_ASSERT( rect.getCenter() == CENTER )
     }
@@ -151,13 +139,13 @@ private:
     test_getters_area_perimeter() {
         float area = rect.width * rect.height;
         float perimeter = rect.width * 2.f + rect.height * 2.f;
-        
+
         TEST_ASSERT( rect.getArea()      == area )
         TEST_ASSERT( rect.getPerimeter() == perimeter )
-    
+
         // are width/height == 0.0f
         TEST_ASSERT( !rect.isEmpty() )
-    
+
         rect.width  = 0;
         rect.height = 0;
         TEST_ASSERT( rect.isEmpty() )
@@ -165,8 +153,8 @@ private:
 
     // Setters
 
-    
-    
+
+
 };
 
 int
@@ -176,6 +164,6 @@ main() {
     ts_types.add( auto_ptr<Test::Suite>( new ofRectangleSuite ) );
 
     Test::TextOutput output( Test::TextOutput::Verbose );
-    
+
     return ts_types.run( output );
 }
