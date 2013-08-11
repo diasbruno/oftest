@@ -56,13 +56,13 @@ namespace :osx do
         TP.libs.each do | lib |
             # exclude what should not be included
             # quicktime is not use
-            headers = fold( "-I ", lib.headers ) if not /poco|quicktime/.match( lib.name )
+            headers = fold( "-I ", lib.headers ) if not /poco|videoinput|quicktime/.match( lib.name )
             # poco we just need poco/include
             headers = "-I #{lib.path_include}" if /poco/.match( lib.name )
-            
+
             tp_headers.push headers
         end
-        
+
         cflags = "#{cflags} #{tp_headers.join( " " )}"
         cflags = "#{cflags}"
 
@@ -75,31 +75,43 @@ namespace :osx do
         # Frameworks
         #
         ldflags = "#{ldflags} -framework GLUT -F#{OFTEST_FRAMEWORKS}"
-    
-        # list 
+
+        # list
         frameworks = "Cocoa ApplicationServices CoreFoundation CoreVideo CoreServices AudioToolbox AGL Carbon OpenGL QuickTime QTKit".split " "
         # fold it with -frameworks
         frameworks = fold( "-framework ", frameworks )
         frameworks="#{frameworks} -Wl,-rpath,./libs #{OFTEST_LIBS}/libfmodex.dylib"
 
-        ldflags = "#{ldflags} #{frameworks}"
-        ldflags = "#{ldflags} -L#{OF.path_lib} -lopenFrameworksDebug"
-        ldflags = "#{ldflags} -L./libs/cpptest/lib/#{OS} -lcpptest"
-        
         tp_libs = []
         TP.libs.each do | lib |
-            
+
             # exclude what should not be included
             # quicktime is not use
             # poco we just need poco/include
-            libs = fold( " ", lib.libs ) if not /glut|fmodex/.match( lib.name )
-            
+            libs = fold( " ", lib.libs ) if not /poco|glut|fmodex/.match( lib.name )
+
             tp_libs.push libs
         end
         tp_libs.push " #{OFTEST_LIBS}/libfmodex.dylib"
-        
-        # we need to exlude poco 
+
+
+
+        # inject Poco
+        tp_libs.push "../libs/poco/lib/osx/PocoCrypto.a"
+        tp_libs.push "../libs/poco/lib/osx/PocoNet.a"
+        tp_libs.push "../libs/poco/lib/osx/PocoNetSSL.a"
+        tp_libs.push "../libs/poco/lib/osx/PocoUtil.a"
+        tp_libs.push "../libs/poco/lib/osx/PocoXML.a"
+        tp_libs.push "../libs/poco/lib/osx/PocoFoundation.a"
+
+        tp_libs = tp_libs.delete_if {|i| i.eql? "" }.join( " " )
+
+        ldflags = "#{ldflags} #{frameworks}"
+        ldflags = "#{ldflags} -L#{OF.path_lib} -lopenFrameworksDebug"
+
         ldflags = "#{ldflags} #{tp_libs}"
+
+        ldflags = "#{ldflags} -L./libs/cpptest/lib/#{OS} -lcpptest"
 
         LDFLAGS = "-g #{ldflags}"
     end
@@ -107,7 +119,7 @@ namespace :osx do
     # Debug target
     #
     task :debug do
-        puts "Mac osx debug...".cyan        
+        puts "Mac osx debug...".cyan
     end
 
 end
